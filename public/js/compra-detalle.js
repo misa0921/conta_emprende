@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", cargarDetalle);
 
 async function cargarDetalle() {
     try {
-const res = await fetch(`http://localhost:3000/api/compras/detalle/${compraId}`);
+    const res = await fetch(`https://contaemprende-production-eb68.up.railway.app/api/compras/detalle/${compraId}`);
         const json = await res.json();
 
         if (!json.ok) throw new Error("Compra no encontrada");

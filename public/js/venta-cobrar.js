@@ -1,4 +1,4 @@
-const API = "http://localhost:3000/api";
+const API = "https://contaemprende-production-eb68.up.railway.app";
 const urlParams = new URLSearchParams(window.location.search);
 const ventaId = urlParams.get("id");
 

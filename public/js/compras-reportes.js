@@ -1,3 +1,5 @@
+const API = "https://contaemprende-production-eb68.up.railway.app/api";
+
 document.addEventListener("DOMContentLoaded", () => {
     cargarProveedores();
     document.querySelector("#btnBuscar").addEventListener("click", buscar);
@@ -5,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 async function cargarProveedores() {
-    const res = await fetch("http://localhost:3000/api/personas/proveedores");
+    const res = await fetch(`${API}/personas/proveedores`);
     const json = await res.json();
 
     const select = document.querySelector("#proveedorId");
@@ -26,7 +28,7 @@ async function buscar() {
 
     const query = new URLSearchParams(filtros);
 
-    const res = await fetch("http://localhost:3000/api/compras/reportes?" + query);
+    const res = await fetch(`${API}/compras/reportes?` + query);
     const json = await res.json();
 
     renderTabla(json.data);
@@ -62,5 +64,5 @@ function descargarExcel() {
 
     const query = new URLSearchParams(filtros);
 
-    window.location.href = "http://localhost:3000/api/compras/reportes/excel?" + query;
+    window.location.href = `${API}/compras/reportes/excel?` + query;
 }

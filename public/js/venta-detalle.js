@@ -1,3 +1,5 @@
+const API = "https://contaemprende-production-eb68.up.railway.app";
+
 const params = new URLSearchParams(window.location.search);
 const ventaId = params.get("id");
 
@@ -8,7 +10,7 @@ async function cargarDetalle() {
     actualizarIdHeader(ventaId);
     
     try {
-        const res = await fetch(`http://localhost:3000/api/ventas/detalle/${ventaId}`);
+        const res = await fetch(`${API}/ventas/detalle/${ventaId}`);
         const json = await res.json();
 
         if (!json.ok) throw new Error("Venta no encontrada");

@@ -1,9 +1,11 @@
 // ===============================
 // CARGAR PROVEEDORES
 // ===============================
+const API = "https://contaemprende-production-eb68.up.railway.app";
+
 async function cargarProveedores(seleccionado = null) {
     try {
-        const res = await fetch("/api/personas/proveedores");
+        const res = await fetch(`${API}/personas/proveedores`);
         const data = await res.json();
 
         const select = document.getElementById("proveedor");
@@ -39,7 +41,7 @@ if (idEditar) {
 
 async function cargarProductoParaEditar(id) {
     try {
-        const res = await fetch(`/api/productos/${id}`);
+        const res = await fetch(`${API}/productos/${id}`);
         const json = await res.json();
 
         if (!json.ok) return;
@@ -77,9 +79,8 @@ document.getElementById("productoForm").addEventListener("submit", async (e) => 
         proveedorId: document.getElementById("proveedor").value
     };
 
-    const url = idEditar
-        ? `/api/productos/${idEditar}`
-        : `/api/productos`;
+    const url = idEditar ? `${API}/productos/${idEditar}` : `${API}/productos`;
+
 
     const metodo = idEditar ? "PUT" : "POST";
 

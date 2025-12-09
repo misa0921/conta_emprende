@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 ===================================================== */
 async function cargarProveedores() {
   try {
-    const res = await fetch("http://localhost:3000/api/personas/proveedores");
+  const res = await fetch("https://contaemprende-production-eb68.up.railway.app/api/personas/proveedores");
     const json = await res.json();
     const select = document.getElementById("proveedorSelect");
     select.innerHTML = "<option value=''>-- Seleccione proveedor --</option>";
@@ -48,7 +48,7 @@ async function cargarProveedores() {
 ===================================================== */
 async function cargarProductos() {
   try {
-    const res = await fetch("http://localhost:3000/api/productos");
+const res = await fetch("https://contaemprende-production-eb68.up.railway.app/api/productos");
     const json = await res.json();
     const lista = json.data ?? json;
 
@@ -87,7 +87,7 @@ async function cargarProductos() {
 ===================================================== */
 async function cargarCompra() {
   try {
-    const res = await fetch(`http://localhost:3000/api/compras/detalle/${compraId}`);
+  const res = await fetch(`https://contaemprende-production-eb68.up.railway.app/api/compras/detalle/${compraId}`);
     const json = await res.json();
 
     if (!json.ok) {
@@ -268,11 +268,12 @@ function configurarGuardar() {
     };
 
     try {
-      const res = await fetch(`http://localhost:3000/api/compras/${compraId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      });
+      const res = await fetch(`https://contaemprende-production-eb68.up.railway.app/api/compras/${compraId}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
 
       const json = await res.json();
 

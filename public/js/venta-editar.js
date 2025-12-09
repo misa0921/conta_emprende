@@ -1,3 +1,4 @@
+const API = "https://contaemprende-production-eb68.up.railway.app";
 const ventaId = new URLSearchParams(window.location.search).get("id");
 
 // Inicialización
@@ -18,7 +19,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 ===================================================== */
 async function cargarClientes() {
   try {
-    const res = await fetch("http://localhost:3000/api/personas/clientes");
+    const res = await fetch(`${API}/personas/clientes`);
     const json = await res.json();
 
     const select = document.getElementById("clienteSelect");
@@ -44,7 +45,7 @@ async function cargarClientes() {
 ===================================================== */
 async function cargarProductos() {
   try {
-    const res = await fetch("http://localhost:3000/api/productos");
+    const res = await fetch(`${API}/productos`);
     const json = await res.json();
 
     window._productos = json.data;
@@ -79,7 +80,7 @@ async function cargarProductos() {
 ===================================================== */
 async function cargarVenta() {
   try {
-    const res = await fetch(`http://localhost:3000/api/ventas/detalle/${ventaId}`);
+    const res = await fetch(`${API}/ventas/detalle/${ventaId}`);
     const json = await res.json();
 
     if (!json.ok || !json.venta) {
@@ -280,7 +281,7 @@ function configurarGuardar() {
       btnGuardar.disabled = true;
       btnGuardar.innerHTML = '<span>Guardando...</span>';
 
-      const res = await fetch(`http://localhost:3000/api/ventas/${ventaId}`, {
+      const res = await fetch(`${API}/ventas/${ventaId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)

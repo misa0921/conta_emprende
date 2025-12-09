@@ -1,3 +1,6 @@
+
+const API = "https://contaemprende-production-eb68.up.railway.app";
+
 const tipoSelect = document.getElementById("tipoPersona");
 const campoSexo = document.getElementById("campo-sexo");
 
@@ -45,11 +48,12 @@ document.getElementById("btnRegistrar").addEventListener("click", async () => {
     }
 
     try {
-        const res = await fetch("/api/personas", {
+        const res = await fetch(`${API}/personas`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ cedula, nombre, sexo, celular, correo, tipo })
         });
+
 
         const data = await res.json();
 

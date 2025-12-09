@@ -1,8 +1,10 @@
+const API = "https://contaemprende-production-eb68.up.railway.app";
+
 document.addEventListener("DOMContentLoaded", () => cargarVentas());
 
 async function cargarVentas() {
     try {
-        const res = await fetch("http://localhost:3000/api/ventas");
+        const res = await fetch(`${API}/ventas`);
         const json = await res.json();
 
         const ventas = json.ventas ?? json.data;

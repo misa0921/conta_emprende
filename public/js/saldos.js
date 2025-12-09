@@ -1,9 +1,11 @@
+const API = "https://contaemprende-production-eb68.up.railway.app";
+
 const modal = document.getElementById('modal-movimientos');
 const tablaMovimientos = document.querySelector('#tabla-movimientos tbody');
 
 async function cargarSaldos() {
   try {
-    const resCuentas = await fetch('/api/saldos');
+    const resCuentas = await fetch(`${API}/saldos`);
     const cuentas = await resCuentas.json();
     const container = document.getElementById('cuentas-container');
 
@@ -107,7 +109,8 @@ async function verMovimientos(cuentaId, nombreCuenta, saldo) {
     modal.classList.add('active');
 
     // Cargar movimientos
-    const res = await fetch(`/api/saldos/movimientos/${cuentaId}`);
+    const res = await fetch(`${API}/saldos/movimientos/${cuentaId}`)
+;
     const movimientos = await res.json();
 
     // Limpiar tabla
