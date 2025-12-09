@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 /* ===================== Cargar Clientes ===================== */
 async function cargarClientes() {
-    const res = await fetch(`${API}/personas`);
+    const res = await fetch(`${API}/api/personas`);
     const data = await res.json();
 
     const clientes = data.data.filter(p => p.tipo === "CLIENTE");
@@ -41,9 +41,9 @@ async function cargarClientes() {
 
 /* ===================== Cargar Productos ===================== */
 async function cargarProductos() {
-    const res = await fetch(`${API}/productos`);
+    const res = await fetch(`${API}/api/productos`);
+    
     const data = await res.json();
-
     const select = document.getElementById("productoSelect");
 
     data.data.forEach(p => {
@@ -140,7 +140,7 @@ async function guardarVenta() {
     console.log("PAYLOAD ENVIADO →", payload);  // Verifica que el número de factura está aquí
 
     try {
-        const res = await fetch(`${API}/ventas`, {
+        const res = await fetch(`${API}/api/ventas`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload)
