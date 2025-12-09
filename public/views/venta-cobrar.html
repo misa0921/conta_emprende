@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles de Venta | ContaEmprende</title>
+    <link rel="stylesheet" href="../css/venta-detalle.css">
+</head>
+<body>
+    <!-- Fondo animado -->
+    <div class="animated-background">
+        <div class="gradient-orb orb-1"></div>
+        <div class="gradient-orb orb-2"></div>
+    </div>
+
+    <!-- Botón Volver flotante -->
+    <button class="btn-volver" onclick="window.location.href='venta-lista.html'">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        Volver
+    </button>
+
+    <div class="container">
+        <!-- Header -->
+        <header class="page-header">
+            <div class="header-left">
+                <div class="header-icon">
+                    <svg width="35" height="35" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                    </svg>
+                </div>
+                <div class="header-content">
+                    <h1>Detalles de Venta</h1>
+                    <p>Información completa de la venta registrada</p>
+                </div>
+            </div>
+            <div class="header-badges">
+                <span class="badge" id="estadoBadge">CARGANDO...</span>
+                <span class="venta-id">ID: <span id="ventaId">000</span></span>
+            </div>
+        </header>
+
+        <!-- Información general -->
+        <section class="info-section">
+            <div class="section-header">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                </svg>
+                <h2>Información de la Venta</h2>
+            </div>
+            <div class="info-grid" id="infoVenta">
+                <!-- Tu JavaScript llenará esto automáticamente -->
+            </div>
+        </section>
+
+        <!-- Tabla de productos -->
+        <section class="table-section">
+            <div class="section-header">
+                <div class="header-title">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z"/>
+                    </svg>
+                    <h2>Productos Vendidos</h2>
+                </div>
+                <span class="product-count" id="productCount">0 productos</span>
+            </div>
+            
+            <div class="table-container">
+                <table id="tablaProductos">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Precio Unit.</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Tu JavaScript llenará esto automáticamente -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Totales y Acciones -->
+        <div class="footer-section">
+            <!-- Totales -->
+            <section class="totales-card">
+                <div class="totales-header">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="1" x2="12" y2="23"/>
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                    </svg>
+                    <h3>Resumen Financiero</h3>
+                </div>
+                <div class="total-row">
+                    <span>Subtotal:</span>
+                    <span>$<span id="baseTotal">0.00</span></span>
+                </div>
+                <div class="total-row">
+                    <span>IVA:</span>
+                    <span>$<span id="ivaTotal">0.00</span></span>
+                </div>
+                <div class="total-row total">
+                    <span>Total Final:</span>
+                    <span>$<span id="totalFinal">0.00</span></span>
+                </div>
+            </section>
+
+            <!-- Acciones -->
+            <div class="acciones-card">
+                <button id="btnEditar" class="btn-accion editar">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                    </svg>
+                    Editar Venta
+                </button>
+                <button id="btnCobrar" class="btn-accion cobrar">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="6" width="20" height="12" rx="2"/>
+                        <path d="M16 10a4 4 0 0 1-8 0"/>
+                    </svg>
+                    Cobrar Venta
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tu JavaScript original -->
+    <script src="../js/venta-detalle.js"></script>
+
+    <!-- Animaciones y mejoras visuales -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Función para extraer ID de la URL
+            function obtenerIdDeURL() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const id = urlParams.get('id');
+                if (id) {
+                    const ventaIdElement = document.getElementById('ventaId');
+                    if (ventaIdElement) {
+                        ventaIdElement.textContent = id;
+                    }
+                }
+                return id;
+            }
+
+            // Intentar obtener ID inmediatamente
+            obtenerIdDeURL();
+
+            // Observar cambios en la info
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if (mutation.target.id === 'tablaProductos') {
+                        const rows = document.querySelectorAll('#tablaProductos tbody tr');
+                        const productCount = document.getElementById('productCount');
+                        if (productCount) {
+                            productCount.textContent = rows.length + ' producto' + (rows.length !== 1 ? 's' : '');
+                        }
+                    }
+                    
+                    if (mutation.target.id === 'infoVenta') {
+                        // Buscar el ID en el contenido si no está en la URL
+                        const paragraphs = Array.from(mutation.target.querySelectorAll('p'));
+                        if (paragraphs.length > 0) {
+                            const infoGrid = document.createElement('div');
+                            infoGrid.className = 'info-grid';
+                            
+                            paragraphs.forEach(function(p) {
+                                const text = p.textContent;
+                                const parts = text.split(':');
+                                if (parts.length >= 2) {
+                                    const label = parts[0].trim();
+                                    const value = parts.slice(1).join(':').trim();
+                                    
+                                    const item = document.createElement('div');
+                                    item.className = 'info-item';
+                                    item.innerHTML = '<label>' + label + '</label><span>' + value + '</span>';
+                                    infoGrid.appendChild(item);
+                                    
+                                    // Actualizar ID en el header si se encuentra en los datos
+                                    if (label.toLowerCase().includes('id') || label.toLowerCase() === 'número' || label.toLowerCase() === 'numero') {
+                                        const ventaIdElement = document.getElementById('ventaId');
+                                        if (ventaIdElement && ventaIdElement.textContent === '000') {
+                                            ventaIdElement.textContent = value;
+                                        }
+                                    }
+                                    
+                                    // Actualizar badge de estado
+                                    if (label === 'Estado' || label.toLowerCase() === 'estado') {
+                                        const estadoBadge = document.getElementById('estadoBadge');
+                                        if (estadoBadge) {
+                                            estadoBadge.textContent = value;
+                                            if (value === 'COBRADA' || value === 'PAGADA' || value.toUpperCase() === 'COBRADA') {
+                                                estadoBadge.className = 'badge badge-cobrada';
+                                                const btnCobrar = document.getElementById('btnCobrar');
+                                                if (btnCobrar) {
+                                                    btnCobrar.disabled = true;
+                                                    btnCobrar.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Ya Cobrada';
+                                                }
+                                            } else {
+                                                estadoBadge.className = 'badge badge-pendiente';
+                                            }
+                                        }
+                                    }
+                                }
+                                p.remove();
+                            });
+                            
+                            mutation.target.appendChild(infoGrid);
+                        }
+                    }
+                });
+            });
+            
+            const infoVenta = document.getElementById('infoVenta');
+            const tablaProductos = document.getElementById('tablaProductos');
+            
+            if (infoVenta) observer.observe(infoVenta, { childList: true, subtree: true });
+            if (tablaProductos) observer.observe(tablaProductos, { childList: true, subtree: true });
+
+            // Verificar nuevamente después de un pequeño delay para datos cargados dinámicamente
+            setTimeout(function() {
+                obtenerIdDeURL();
+                
+                // Si aún no hay ID, buscar en el contenido de infoVenta
+                const ventaIdElement = document.getElementById('ventaId');
+                if (ventaIdElement && ventaIdElement.textContent === '000') {
+                    const infoItems = document.querySelectorAll('#infoVenta .info-item');
+                    infoItems.forEach(function(item) {
+                        const label = item.querySelector('label');
+                        const value = item.querySelector('span');
+                        if (label && value) {
+                            const labelText = label.textContent.toLowerCase();
+                            if (labelText.includes('id') || labelText === 'número' || labelText === 'numero') {
+                                ventaIdElement.textContent = value.textContent;
+                            }
+                        }
+                    });
+                }
+            }, 500);
+        });
+
+        // Función global para actualizar el ID (puede ser llamada desde tu JS externo)
+        window.actualizarVentaId = function(id) {
+            const ventaIdElement = document.getElementById('ventaId');
+            if (ventaIdElement && id) {
+                ventaIdElement.textContent = id;
+            }
+        };
+    </script>
+</body>
+</html>

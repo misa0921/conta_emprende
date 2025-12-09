@@ -1,0 +1,896 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+body {
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* ===== PANTALLA DE BIENVENIDA ===== */
+.welcome-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.welcome-screen.fade-out {
+    opacity: 0;
+    transform: scale(1.1);
+}
+
+.welcome-animation {
+    text-align: center;
+    color: white;
+}
+
+/* Icono que cae */
+.icon-drop {
+    width: 120px;
+    height: 120px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 30px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: iconDrop 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    position: relative;
+}
+
+@keyframes iconDrop {
+    0% {
+        transform: translateY(-1000px) rotate(-720deg);
+        opacity: 0;
+    }
+    60% {
+        transform: translateY(30px) rotate(20deg);
+        opacity: 1;
+    }
+    80% {
+        transform: translateY(-10px) rotate(-10deg);
+    }
+    100% {
+        transform: translateY(0) rotate(0deg);
+    }
+}
+
+.icon-drop::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 30px;
+    animation: iconPulse 2s ease-in-out 1.2s infinite;
+}
+
+@keyframes iconPulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 0.3;
+    }
+    50% {
+        transform: scale(1.15);
+        opacity: 0;
+    }
+}
+
+.icon-drop svg {
+    z-index: 1;
+    animation: iconRotate 1s ease 1.2s;
+}
+
+@keyframes iconRotate {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-10deg); }
+    75% { transform: rotate(10deg); }
+}
+
+/* Marca de la empresa */
+.brand-welcome {
+    font-size: 56px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    animation: brandSlideIn 0.8s ease 1.2s both;
+}
+
+@keyframes brandSlideIn {
+    0% {
+        opacity: 0;
+        transform: translateX(-100px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.brand-welcome span {
+    color: #2d3748;
+    animation: spanHighlight 0.6s ease 2s both;
+}
+
+@keyframes spanHighlight {
+    0%, 100% { 
+        transform: scale(1);
+    }
+    50% { 
+        transform: scale(1.1);
+    }
+}
+
+.tagline-welcome {
+    font-size: 18px;
+    opacity: 0.95;
+    margin-bottom: 40px;
+    animation: fadeInUp 0.8s ease 1.5s both;
+}
+
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    100% {
+        opacity: 0.95;
+        transform: translateY(0);
+    }
+}
+
+/* Puntos de carga */
+.loading-dots {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+    animation: fadeIn 0.5s ease 2s both;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.loading-dots span {
+    width: 12px;
+    height: 12px;
+    background: white;
+    border-radius: 50%;
+    animation: dotBounce 1.4s infinite ease-in-out;
+}
+
+.loading-dots span:nth-child(1) {
+    animation-delay: -0.32s;
+}
+
+.loading-dots span:nth-child(2) {
+    animation-delay: -0.16s;
+}
+
+@keyframes dotBounce {
+    0%, 80%, 100% {
+        transform: scale(0.8);
+        opacity: 0.5;
+    }
+    40% {
+        transform: scale(1.2);
+        opacity: 1;
+    }
+}
+
+/* ===== PANTALLA DE LOGIN ===== */
+.login-container {
+    display: none;
+    height: 100vh;
+    width: 100%;
+    opacity: 0;
+    transform: scale(0.95);
+}
+
+.login-container.appear {
+    animation: loginAppear 0.8s ease forwards;
+}
+
+@keyframes loginAppear {
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* ===== PANEL IZQUIERDO - FORMULARIO ===== */
+.login-left {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #ffffff;
+    padding: 40px;
+    animation: slideInLeft 0.8s ease 0.3s both;
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.login-box {
+    width: 100%;
+    max-width: 420px;
+}
+
+/* Logo animado */
+.logo-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+    animation: fadeInDown 0.6s ease 0.5s both;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.logo-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 30px rgba(72, 187, 120, 0.3);
+    animation: logoFloat 3s ease-in-out infinite;
+    position: relative;
+}
+
+.logo-icon::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+    border-radius: 20px;
+    opacity: 0.5;
+    animation: logoPulse 2s ease-in-out infinite;
+}
+
+@keyframes logoFloat {
+    0%, 100% {
+        transform: translateY(0) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-10px) rotate(5deg);
+    }
+}
+
+@keyframes logoPulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 0.5;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 0.3;
+    }
+}
+
+.logo-icon svg {
+    color: white;
+    z-index: 1;
+}
+
+.login-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #2d3748;
+    margin-bottom: 8px;
+    text-align: center;
+    animation: fadeIn 0.8s ease 0.7s both;
+}
+
+.login-subtitle {
+    text-align: center;
+    color: #718096;
+    font-size: 14px;
+    margin-bottom: 35px;
+    animation: fadeIn 0.8s ease 0.9s both;
+}
+
+/* Formulario */
+#loginForm {
+    animation: fadeInUp 0.6s ease 1s both;
+}
+
+.input-group {
+    margin-bottom: 25px;
+    position: relative;
+}
+
+.input-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    color: #4a5568;
+    margin-bottom: 10px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.input-group label svg {
+    color: #48bb78;
+    transition: all 0.3s ease;
+}
+
+.input-group:hover label svg {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.input-group input {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 15px;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    background: #f7fafc;
+    position: relative;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: #48bb78;
+    background: white;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(72, 187, 120, 0.2);
+}
+
+/* Borde animado debajo del input */
+.input-border {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #48bb78, #38a169);
+    transition: all 0.4s ease;
+    border-radius: 2px;
+    transform: translateX(-50%);
+}
+
+.input-group input:focus + .input-border {
+    width: 100%;
+}
+
+/* Checkbox personalizado */
+.form-options {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 25px;
+    font-size: 14px;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    color: #4a5568;
+    user-select: none;
+    position: relative;
+}
+
+.checkbox-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.checkmark {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #e2e8f0;
+    border-radius: 5px;
+    margin-right: 10px;
+    transition: all 0.3s ease;
+    position: relative;
+    background: white;
+}
+
+.checkmark::after {
+    content: '';
+    position: absolute;
+    display: none;
+    left: 6px;
+    top: 2px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.checkbox-container:hover .checkmark {
+    border-color: #48bb78;
+    transform: scale(1.05);
+}
+
+.checkbox-container input:checked ~ .checkmark {
+    background: linear-gradient(135deg, #48bb78, #38a169);
+    border-color: #48bb78;
+    animation: checkboxPop 0.3s ease;
+}
+
+@keyframes checkboxPop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+.checkbox-container input:checked ~ .checkmark::after {
+    display: block;
+    animation: checkmark 0.3s ease;
+}
+
+@keyframes checkmark {
+    0% { height: 0; }
+    100% { height: 10px; }
+}
+
+/* BotÃ³n de Login con animaciones avanzadas */
+.btn-login {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+    border: none;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3);
+}
+
+.btn-login::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.btn-login:hover::before {
+    left: 100%;
+}
+
+.btn-login:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(72, 187, 120, 0.4);
+}
+
+.btn-login:active {
+    transform: translateY(0);
+}
+
+.btn-arrow {
+    transition: transform 0.3s ease;
+}
+
+.btn-login:hover .btn-arrow {
+    transform: translateX(5px);
+}
+
+/* Loader en el botÃ³n */
+.btn-loader {
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    display: none;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.btn-login.loading .btn-loader {
+    display: block;
+}
+
+.btn-login.loading span,
+.btn-login.loading .btn-arrow {
+    display: none;
+}
+
+.error-msg {
+    margin-top: 15px;
+    color: #e53e3e;
+    text-align: center;
+    font-size: 14px;
+    min-height: 20px;
+    animation: shake 0.5s ease;
+    font-weight: 500;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+/* Badge de seguridad */
+.security-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 25px;
+    color: #718096;
+    font-size: 13px;
+    animation: fadeIn 1s ease 1.5s both;
+}
+
+.security-badge svg {
+    color: #48bb78;
+    animation: securityPulse 2s ease-in-out infinite;
+}
+
+@keyframes securityPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}
+
+/* ===== PANEL DERECHO - BIENVENIDA ===== */
+.login-right {
+    flex: 1;
+    background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+    animation: slideInRight 0.8s ease 0.5s both;
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Formas Flotantes Animadas */
+.floating-shapes {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+.shape {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    backdrop-filter: blur(10px);
+}
+
+.shape-1 {
+    width: 300px;
+    height: 300px;
+    top: -50px;
+    right: -50px;
+    animation: float1 8s ease-in-out infinite;
+}
+
+.shape-2 {
+    width: 200px;
+    height: 200px;
+    bottom: -30px;
+    left: -30px;
+    animation: float2 10s ease-in-out infinite;
+}
+
+.shape-3 {
+    width: 150px;
+    height: 150px;
+    top: 50%;
+    right: 20%;
+    animation: float3 7s ease-in-out infinite;
+}
+
+@keyframes float1 {
+    0%, 100% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+    33% {
+        transform: translate(30px, -30px) rotate(120deg);
+    }
+    66% {
+        transform: translate(-20px, 20px) rotate(240deg);
+    }
+}
+
+@keyframes float2 {
+    0%, 100% {
+        transform: translate(0, 0) scale(1);
+    }
+    50% {
+        transform: translate(-40px, -40px) scale(1.1);
+    }
+}
+
+@keyframes float3 {
+    0%, 100% {
+        transform: translateY(0) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-40px) rotate(180deg);
+    }
+}
+
+/* Iconos contables flotantes */
+.accounting-icons {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+.icon-float {
+    position: absolute;
+    opacity: 0.3;
+    transition: transform 0.3s ease;
+}
+
+.icon-1 {
+    top: 15%;
+    left: 10%;
+    animation: iconFloat1 6s ease-in-out infinite;
+}
+
+.icon-2 {
+    top: 60%;
+    left: 15%;
+    animation: iconFloat2 7s ease-in-out infinite 1s;
+}
+
+.icon-3 {
+    top: 30%;
+    right: 15%;
+    animation: iconFloat3 8s ease-in-out infinite 0.5s;
+}
+
+.icon-4 {
+    bottom: 20%;
+    right: 10%;
+    animation: iconFloat4 9s ease-in-out infinite 1.5s;
+}
+
+@keyframes iconFloat1 {
+    0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.3; }
+    50% { transform: translateY(-20px) rotate(10deg); opacity: 0.5; }
+}
+
+@keyframes iconFloat2 {
+    0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.2; }
+    50% { transform: translateY(-30px) rotate(-10deg); opacity: 0.4; }
+}
+
+@keyframes iconFloat3 {
+    0%, 100% { transform: translateX(0) rotate(0deg); opacity: 0.3; }
+    50% { transform: translateX(20px) rotate(15deg); opacity: 0.5; }
+}
+
+@keyframes iconFloat4 {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); opacity: 0.25; }
+    50% { transform: translate(-15px, -15px) rotate(-15deg); opacity: 0.45; }
+}
+
+.welcome-content {
+    text-align: center;
+    color: white;
+    z-index: 1;
+    animation: fadeIn 0.8s ease 0.8s both;
+}
+
+.welcome-title {
+    font-size: 48px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    animation: titleAppear 1s ease 1s both;
+}
+
+@keyframes titleAppear {
+    0% {
+        opacity: 0;
+        transform: scale(0.5) rotate(-5deg);
+    }
+    60% {
+        transform: scale(1.05) rotate(2deg);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+    }
+}
+
+.welcome-text {
+    font-size: 18px;
+    line-height: 1.7;
+    margin-bottom: 40px;
+    opacity: 0.95;
+    max-width: 450px;
+    margin-left: auto;
+    margin-right: auto;
+    animation: fadeIn 1s ease 1.2s both;
+}
+
+/* Stats Container */
+.stats-container {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin: 40px 0;
+    animation: fadeInUp 1s ease 1.4s both;
+}
+
+.stat-item {
+    text-align: center;
+    animation: statPop 0.6s ease both;
+}
+
+.stat-item:nth-child(1) { animation-delay: 1.6s; }
+.stat-item:nth-child(2) { animation-delay: 1.8s; }
+.stat-item:nth-child(3) { animation-delay: 2s; }
+
+@keyframes statPop {
+    0% {
+        opacity: 0;
+        transform: translateY(20px) scale(0.8);
+    }
+    50% {
+        transform: translateY(-5px) scale(1.05);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.stat-number {
+    font-size: 42px;
+    font-weight: 700;
+    margin-bottom: 5px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.stat-label {
+    font-size: 14px;
+    opacity: 0.9;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.brand-footer {
+    margin-top: 50px;
+    animation: fadeIn 1s ease 2.2s both;
+}
+
+.brand-name {
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.brand-name span {
+    color: #2d3748;
+}
+
+.brand-tagline {
+    font-size: 14px;
+    opacity: 0.9;
+    font-style: italic;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 968px) {
+    .login-container {
+        flex-direction: column;
+    }
+    
+    .login-right {
+        display: none;
+    }
+    
+    .login-left {
+        flex: 1;
+    }
+}
+
+@media (max-width: 480px) {
+    .brand-welcome {
+        font-size: 42px;
+    }
+    
+    .icon-drop {
+        width: 90px;
+        height: 90px;
+    }
+    
+    .icon-drop svg {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .login-left {
+        padding: 20px;
+    }
+    
+    .logo-icon {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .logo-icon svg {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .login-title {
+        font-size: 26px;
+    }
+    
+    .stats-container {
+        flex-direction: column;
+        gap: 20px;
+    }
+}

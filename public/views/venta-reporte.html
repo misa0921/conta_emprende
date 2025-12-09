@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reportes de Ventas | ContaEmprende</title>
+    <link rel="stylesheet" href="../css/venta-reporte.css">
+</head>
+<body>
+    <!-- Fondo animado -->
+    <div class="animated-background">
+        <div class="gradient-orb orb-1"></div>
+        <div class="gradient-orb orb-2"></div>
+        <div class="floating-icon icon-1">
+            <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 1v22M5 6h7a5 5 0 0 1 0 10H5"/>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Botón Volver flotante -->
+    <button class="btn-volver" onclick="window.history.back()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        Volver
+    </button>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="page-header">
+            <div class="header-icon">
+                <svg width="35" height="35" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                </svg>
+            </div>
+            <div class="header-text">
+                <h1>Reportes de Ventas</h1>
+                <p>Filtra y analiza tus ventas registradas</p>
+            </div>
+        </div>
+
+        <!-- Filtros -->
+        <section class="filtros-card">
+            <div class="card-header">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+                </svg>
+                <h2>Filtros de Búsqueda</h2>
+            </div>
+
+            <section class="filtros">
+                <div class="campo">
+                    <label>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                        Cliente
+                    </label>
+                    <select id="clienteId">
+                        <option value="">Todos los clientes</option>
+                    </select>
+                    <div class="input-line"></div>
+                </div>
+
+                <div class="campo">
+                    <label>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                            <polyline points="22 4 12 14.01 9 11.01"/>
+                        </svg>
+                        Estado
+                    </label>
+                    <select id="estado">
+                        <option value="">Todos los estados</option>
+                        <option value="PENDIENTE">Pendiente</option>
+                        <option value="COBRADA">Cobrada</option>
+                    </select>
+                    <div class="input-line"></div>
+                </div>
+
+                <div class="campo">
+                    <label>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                            <line x1="16" y1="2" x2="16" y2="6"/>
+                            <line x1="8" y1="2" x2="8" y2="6"/>
+                            <line x1="3" y1="10" x2="21" y2="10"/>
+                        </svg>
+                        Desde
+                    </label>
+                    <input type="date" id="desde">
+                    <div class="input-line"></div>
+                </div>
+
+                <div class="campo">
+                    <label>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                            <line x1="16" y1="2" x2="16" y2="6"/>
+                            <line x1="8" y1="2" x2="8" y2="6"/>
+                            <line x1="3" y1="10" x2="21" y2="10"/>
+                        </svg>
+                        Hasta
+                    </label>
+                    <input type="date" id="hasta">
+                    <div class="input-line"></div>
+                </div>
+
+                <button id="btnBuscar" class="btn btn-primary">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="m21 21-4.35-4.35"/>
+                    </svg>
+                    Buscar
+                </button>
+
+                <button id="btnExcel" class="btn btn-excel">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="12" y1="18" x2="12" y2="12"/>
+                        <line x1="9" y1="15" x2="15" y2="15"/>
+                    </svg>
+                    Exportar Excel
+                </button>
+
+                <button id="btnLimpiar" class="btn btn-secondary">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                        <line x1="10" y1="11" x2="10" y2="17"/>
+                        <line x1="14" y1="11" x2="14" y2="17"/>
+                    </svg>
+                    Limpiar
+                </button>
+            </section>
+        </section>
+
+        <!-- Estadísticas rápidas -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="8.5" cy="7" r="4"/>
+                        <polyline points="17 11 19 13 23 9"/>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <h3>Ventas Totales</h3>
+                    <p class="stat-number" id="ventasTotales">0</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="1" x2="12" y2="23"/>
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <h3>Total Cobrado</h3>
+                    <p class="stat-number" id="totalCobrado">$0</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <h3>Pendientes</h3>
+                    <p class="stat-number" id="ventasPendientes">0</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="8" y1="21" x2="16" y2="21"/>
+                        <line x1="12" y1="17" x2="12" y2="21"/>
+                        <line x1="3" y1="10" x2="21" y2="10"/>
+                        <path d="M5 10V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v5"/>
+                        <path d="M9 5v5"/>
+                        <path d="M15 5v5"/>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <h3>IVA Recaudado</h3>
+                    <p class="stat-number" id="ivaRecaudado">$0</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabla de resultados -->
+        <div class="table-section">
+            <div class="table-header">
+                <div class="table-title">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z"/>
+                    </svg>
+                    <h2>Resultados de Ventas</h2>
+                </div>
+                <div class="table-controls">
+                    <div class="results-count">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>
+                        </svg>
+                        <span id="totalResultados">0</span> ventas encontradas
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table id="tablaReportes">
+                    <thead>
+                        <tr>
+                            <th>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="12" y1="1" x2="12" y2="23"/>
+                                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                                </svg>
+                                ID
+                            </th>
+                            <th>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                    <circle cx="12" cy="7" r="4"/>
+                                </svg>
+                                Cliente
+                            </th>
+                            <th>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                    <polyline points="14 2 14 8 20 8"/>
+                                </svg>
+                                Factura
+                            </th>
+                            <th>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                    <line x1="16" y1="2" x2="16" y2="6"/>
+                                    <line x1="8" y1="2" x2="8" y2="6"/>
+                                    <line x1="3" y1="10" x2="21" y2="10"/>
+                                </svg>
+                                Fecha
+                            </th>
+                            <th>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="12" y1="1" x2="12" y2="23"/>
+                                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                                </svg>
+                                Base
+                            </th>
+                            <th>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="12" y1="1" x2="12" y2="23"/>
+                                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                                </svg>
+                                IVA
+                            </th>
+                            <th>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="12" y1="1" x2="12" y2="23"/>
+                                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                                </svg>
+                                Total
+                            </th>
+                            <th>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                    <polyline points="22 4 12 14.01 9 11.01"/>
+                                </svg>
+                                Estado
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Se llena desde JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Footer con resumen -->
+        <div class="summary-footer">
+            <div class="summary-item">
+                <span class="summary-label">Total Base:</span>
+                <span class="summary-value" id="sumBase">$0</span>
+            </div>
+            <div class="summary-item">
+                <span class="summary-label">Total IVA:</span>
+                <span class="summary-value" id="sumIVA">$0</span>
+            </div>
+            <div class="summary-item total">
+                <span class="summary-label">Total General:</span>
+                <span class="summary-value" id="sumTotal">$0</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/venta-reportes.js"></script>
+    <script>
+        // Animaciones de entrada
+        window.addEventListener('load', () => {
+            const sections = document.querySelectorAll('.filtros-card, .stats-grid, .table-section');
+            sections.forEach((section, index) => {
+                setTimeout(() => {
+                    section.classList.add('appear');
+                }, index * 200);
+            });
+
+            // Animación de campos
+            setTimeout(() => {
+                const campos = document.querySelectorAll('.campo');
+                campos.forEach((campo, index) => {
+                    setTimeout(() => {
+                        campo.classList.add('appear');
+                    }, index * 80);
+                });
+            }, 400);
+
+            // Animación tarjetas de estadísticas
+            setTimeout(() => {
+                const statCards = document.querySelectorAll('.stat-card');
+                statCards.forEach((card, index) => {
+                    setTimeout(() => {
+                        card.classList.add('appear');
+                    }, index * 100);
+                });
+            }, 600);
+        });
+
+        // Focus en inputs
+        document.querySelectorAll('input, select').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.closest('.campo').classList.add('focused');
+            });
+            input.addEventListener('blur', function() {
+                if (!this.value) {
+                    this.closest('.campo').classList.remove('focused');
+                }
+            });
+        });
+
+        // Botón limpiar filtros
+        document.getElementById('btnLimpiar').addEventListener('click', function() {
+            document.querySelectorAll('#clienteId, #estado, #desde, #hasta').forEach(el => {
+                el.value = '';
+                el.closest('.campo').classList.remove('focused');
+            });
+            
+            // Llamar a la función de búsqueda para actualizar resultados
+            if (typeof buscarVentas === 'function') {
+                buscarVentas();
+            } else {
+                // Si no existe la función, simular click en buscar
+                document.getElementById('btnBuscar').click();
+            }
+        });
+
+        // Animación en botones
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                this.classList.add('clicked');
+                setTimeout(() => {
+                    this.classList.remove('clicked');
+                }, 300);
+            });
+        });
+
+        // Actualizar estadísticas
+        function actualizarEstadisticas() {
+            const rows = document.querySelectorAll('#tablaReportes tbody tr');
+            const totalVentas = rows.length;
+            
+            document.getElementById('totalResultados').textContent = totalVentas;
+            document.getElementById('ventasTotales').textContent = totalVentas;
+            
+            // Calcular totales
+            let totalBase = 0;
+            let totalIVA = 0;
+            let totalCobrado = 0;
+            let pendientes = 0;
+            
+            rows.forEach(row => {
+                if (row.cells.length >= 8) {
+                    // Extraer valores numéricos de las celdas
+                    const baseText = row.cells[4].textContent.trim();
+                    const ivaText = row.cells[5].textContent.trim();
+                    const totalText = row.cells[6].textContent.trim();
+                    const estadoCell = row.cells[7];
+                    
+                    // Convertir a números (remover $, comas, etc)
+                    const base = parseFloat(baseText.replace(/[$,]/g, '')) || 0;
+                    const iva = parseFloat(ivaText.replace(/[$,]/g, '')) || 0;
+                    const total = parseFloat(totalText.replace(/[$,]/g, '')) || 0;
+                    
+                    totalBase += base;
+                    totalIVA += iva;
+                    
+                    // Verificar estado de la venta
+                    const estadoTexto = estadoCell.textContent.trim().toUpperCase();
+                    
+                    if (estadoTexto === 'COBRADA') {
+                        totalCobrado += total;
+                    } else if (estadoTexto === 'PENDIENTE') {
+                        pendientes++;
+                    }
+                }
+            });
+            
+            // Actualizar contador de pendientes
+            document.getElementById('ventasPendientes').textContent = pendientes;
+            
+            // Formatear números con separadores de miles
+            const formatearNumero = (num) => {
+                return '$' + num.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+            };
+            
+            document.getElementById('totalCobrado').textContent = formatearNumero(totalCobrado);
+            document.getElementById('ivaRecaudado').textContent = formatearNumero(totalIVA);
+            document.getElementById('sumBase').textContent = formatearNumero(totalBase);
+            document.getElementById('sumIVA').textContent = formatearNumero(totalIVA);
+            document.getElementById('sumTotal').textContent = formatearNumero(totalBase + totalIVA);
+        }
+
+        // Observar cambios en la tabla
+        const observer = new MutationObserver(() => {
+            actualizarEstadisticas();
+        });
+        
+        const tbody = document.querySelector('#tablaReportes tbody');
+        if (tbody) {
+            observer.observe(tbody, { childList: true });
+        }
+
+        // Inicializar estadísticas
+        actualizarEstadisticas();
+    </script>
+</body>
+</html>

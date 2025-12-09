@@ -1,0 +1,684 @@
+/* FUENTE MODERNA */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    min-height: 100vh;
+    padding: 20px;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* ===== FONDO ANIMADO ===== */
+.animated-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.gradient-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.3;
+    animation: orbFloat 20s infinite ease-in-out;
+}
+
+.orb-1 {
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(72, 187, 120, 0.4), transparent);
+    top: -10%;
+    right: -10%;
+}
+
+.orb-2 {
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, rgba(56, 161, 105, 0.3), transparent);
+    bottom: -10%;
+    left: -10%;
+    animation-delay: 10s;
+}
+
+@keyframes orbFloat {
+    0%, 100% {
+        transform: translate(0, 0) scale(1);
+    }
+    33% {
+        transform: translate(50px, -50px) scale(1.1);
+    }
+    66% {
+        transform: translate(-30px, 30px) scale(0.9);
+    }
+}
+
+/* ===== BOTÓN VOLVER ===== */
+.btn-volver {
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 24px;
+    background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 25px rgba(72, 187, 120, 0.4);
+    z-index: 1000;
+    font-family: 'Poppins', sans-serif;
+    animation: slideInBottom 0.6s ease;
+}
+
+@keyframes slideInBottom {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.btn-volver:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 12px 35px rgba(72, 187, 120, 0.6);
+}
+
+.btn-volver svg {
+    transition: transform 0.3s ease;
+}
+
+.btn-volver:hover svg {
+    transform: translateX(-5px);
+}
+
+/* ===== CONTAINER ===== */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+/* ===== HEADER ===== */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    padding: 30px 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    margin-bottom: 30px;
+    animation: slideDown 0.6s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.header-icon {
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, #48bb78, #38a169);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 25px rgba(72, 187, 120, 0.3);
+    animation: iconBounce 2s ease-in-out infinite;
+}
+
+@keyframes iconBounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+.header-icon svg {
+    color: white;
+}
+
+.header-text h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #2d3748;
+    margin-bottom: 5px;
+    background: linear-gradient(135deg, #48bb78, #38a169);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.header-text p {
+    font-size: 14px;
+    color: #718096;
+}
+
+/* ===== SECCIONES DEL FORMULARIO ===== */
+.form-section,
+.table-section {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    margin-bottom: 30px;
+    overflow: hidden;
+    animation: fadeInUp 0.6s ease;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.section-header {
+    background: linear-gradient(135deg, #48bb78, #38a169);
+    padding: 20px 30px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: white;
+}
+
+.section-header h2 {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* ===== CAMPOS DEL FORMULARIO ===== */
+.compra-container,
+.productos-agregar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    padding: 30px;
+}
+
+.campo {
+    position: relative;
+}
+
+.campo label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    color: #2d3748;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.campo label svg {
+    color: #48bb78;
+}
+
+.campo input,
+.campo select {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 15px;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.3s ease;
+    background: #f7fafc;
+    outline: none;
+}
+
+.campo input:focus,
+.campo select:focus {
+    border-color: #48bb78;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(72, 187, 120, 0.1);
+    transform: translateY(-2px);
+}
+
+.campo.focused label {
+    color: #48bb78;
+}
+
+/* Línea animada */
+.input-line {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #48bb78, #38a169);
+    border-radius: 2px;
+    transition: all 0.4s ease;
+    transform: translateX(-50%);
+}
+
+.campo.focused .input-line,
+.campo input:focus ~ .input-line,
+.campo select:focus ~ .input-line {
+    width: 100%;
+}
+
+/* ===== BOTÓN AGREGAR ===== */
+.btn-agregar {
+    grid-column: 1 / -1;
+    padding: 16px;
+    background: linear-gradient(135deg, #48bb78, #38a169);
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3);
+    font-family: 'Poppins', sans-serif;
+}
+
+.btn-agregar:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(72, 187, 120, 0.4);
+}
+
+.btn-agregar:active {
+    transform: translateY(0);
+}
+
+/* ===== TABLA ===== */
+.table-container {
+    padding: 30px;
+    overflow-x: auto;
+}
+
+#tablaDetalles {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#tablaDetalles thead {
+    background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+}
+
+#tablaDetalles th {
+    padding: 18px 16px;
+    color: #2d3748;
+    font-weight: 600;
+    font-size: 14px;
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+#tablaDetalles tbody tr {
+    border-bottom: 1px solid #f1f5f9;
+    transition: all 0.3s ease;
+}
+
+#tablaDetalles tbody tr:hover {
+    background: #f8fffe;
+    transform: scale(1.01);
+}
+
+#tablaDetalles td {
+    padding: 16px;
+    color: #4a5568;
+    font-size: 15px;
+}
+
+/* Botón eliminar */
+button.eliminar {
+    padding: 8px 16px;
+    background: linear-gradient(135deg, #f56565, #e53e3e);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+}
+
+button.eliminar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(245, 101, 101, 0.4);
+}
+
+button.eliminar:active {
+    transform: translateY(0);
+}
+
+/* ===== FOOTER ===== */
+.footer-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+
+/* Totales */
+.totales-card {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+}
+
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 0;
+    font-size: 18px;
+    color: #4a5568;
+    border-bottom: 1px solid #f1f5f9;
+    font-weight: 500;
+}
+
+.total-row.total {
+    border-bottom: none;
+    font-size: 28px;
+    font-weight: 700;
+    color: #2d3748;
+    padding-top: 20px;
+    border-top: 2px solid #48bb78;
+}
+
+.total-row.total span:last-child {
+    color: #48bb78;
+}
+
+/* ===== BOTÓN GUARDAR ===== */
+.btn-guardar {
+    width: 100%;
+    padding: 20px;
+    background: linear-gradient(135deg, #48bb78, #38a169);
+    border: none;
+    border-radius: 16px;
+    color: white;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 25px rgba(72, 187, 120, 0.3);
+    font-family: 'Poppins', sans-serif;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-guardar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.btn-guardar:hover::before {
+    left: 100%;
+}
+
+.btn-guardar:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(72, 187, 120, 0.5);
+}
+
+.btn-guardar:active {
+    transform: translateY(0);
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f0fdf4;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #48bb78, #38a169);
+    border-radius: 10px;
+    border: 2px solid #f0fdf4;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #38a169, #2f855a);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 968px) {
+    .page-header {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+    }
+
+    .header-left {
+        flex-direction: column;
+    }
+
+    .compra-container,
+    .productos-agregar {
+        grid-template-columns: 1fr;
+    }
+
+    .footer-section {
+        grid-template-columns: 1fr;
+    }
+
+    .btn-volver {
+        bottom: 20px;
+        left: 20px;
+        padding: 14px 20px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 15px;
+    }
+
+    .header-text h1 {
+        font-size: 24px;
+    }
+
+    #tablaDetalles th,
+    #tablaDetalles td {
+        padding: 12px 8px;
+        font-size: 13px;
+    }
+
+    .total-row.total {
+        font-size: 22px;
+    }
+}
+/* Agregar al final de compra-editar.css */
+
+/* ===== TABLA CON DISEÑO LIMPIO ===== */
+#tablaDetalles tbody td {
+    padding: 16px;
+    vertical-align: middle;
+    text-align: center;
+}
+
+/* Estilos para celdas de texto */
+.producto-nombre {
+    font-weight: 500;
+    color: #2d3748;
+    text-align: left;
+}
+
+.cantidad-texto,
+.precio-texto,
+.subtotal-texto {
+    text-align: center;
+}
+
+.subtotal-texto {
+    font-weight: 700;
+    color: #48bb78;
+    font-size: 1.1em;
+}
+
+/* Celda de acción */
+.td-accion {
+    text-align: center;
+}
+
+/* Botón eliminar mejorado */
+.btn-eliminar-det {
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #f56565, #e53e3e);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+    box-shadow: 0 4px 15px rgba(245, 101, 101, 0.3);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-eliminar-det::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.btn-eliminar-det:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.btn-eliminar-det:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(245, 101, 101, 0.4);
+}
+
+.btn-eliminar-det:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 15px rgba(245, 101, 101, 0.3);
+}
+
+.btn-eliminar-det svg {
+    width: 16px;
+    height: 16px;
+    position: relative;
+    z-index: 1;
+}
+
+/* Animación para filas nuevas */
+#tablaDetalles tbody tr {
+    animation: slideIn 0.4s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Hover en la fila */
+#tablaDetalles tbody tr:hover {
+    background: linear-gradient(90deg, rgba(240, 253, 244, 0.5), rgba(220, 252, 231, 0.5));
+    transform: scale(1.005);
+}
+
+/* Centrar encabezados */
+#tablaDetalles thead th {
+    text-align: center;
+}
+
+#tablaDetalles thead th:first-child {
+    text-align: left;
+}
+
+/* Animación spinner para botón guardar */
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.spinner {
+    animation: spin 1s linear infinite;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .btn-eliminar-det {
+        padding: 8px 16px;
+        font-size: 13px;
+    }
+    
+    .btn-eliminar-det span {
+        display: none;
+    }
+}

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reportes de Compras | ContaEmprende</title>
+    <link rel="stylesheet" href="../css/compras-reportes.css">
+</head>
+<body>
+    <!-- Fondo animado -->
+    <div class="animated-background">
+        <div class="gradient-orb orb-1"></div>
+        <div class="gradient-orb orb-2"></div>
+        <div class="floating-icon icon-1">
+            <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 3v18h18"/>
+                <path d="M18 17V9"/>
+                <path d="M13 17V5"/>
+                <path d="M8 17v-3"/>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Botón Volver flotante -->
+    <button class="btn-volver" onclick="window.history.back()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        Volver
+    </button>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="page-header">
+            <div class="header-icon">
+                <svg width="35" height="35" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 3v18h18"/>
+                    <path d="M18 17V9"/>
+                    <path d="M13 17V5"/>
+                    <path d="M8 17v-3"/>
+                </svg>
+            </div>
+            <div class="header-text">
+                <h1>Reportes de Compras</h1>
+                <p>Filtra y analiza tus compras registradas</p>
+            </div>
+        </div>
+
+        <!-- Filtros -->
+        <section class="filtros-card">
+            <div class="card-header">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+                </svg>
+                <h2>Filtros de Búsqueda</h2>
+            </div>
+
+            <section class="filtros">
+                <div class="campo">
+                    <label>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                        Proveedor
+                    </label>
+                    <select id="proveedorId">
+                        <option value="">Todos los proveedores</option>
+                    </select>
+                    <div class="input-line"></div>
+                </div>
+
+                <div class="campo">
+                    <label>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                            <polyline points="22 4 12 14.01 9 11.01"/>
+                        </svg>
+                        Estado
+                    </label>
+                    <select id="estado">
+                        <option value="">Todos los estados</option>
+                        <option value="PENDIENTE">Pendiente</option>
+                        <option value="PAGADA">Pagada</option>
+                    </select>
+                    <div class="input-line"></div>
+                </div>
+
+                <div class="campo">
+                    <label>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                            <line x1="16" y1="2" x2="16" y2="6"/>
+                            <line x1="8" y1="2" x2="8" y2="6"/>
+                            <line x1="3" y1="10" x2="21" y2="10"/>
+                        </svg>
+                        Desde
+                    </label>
+                    <input type="date" id="desde">
+                    <div class="input-line"></div>
+                </div>
+
+                <div class="campo">
+                    <label>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                            <line x1="16" y1="2" x2="16" y2="6"/>
+                            <line x1="8" y1="2" x2="8" y2="6"/>
+                            <line x1="3" y1="10" x2="21" y2="10"/>
+                        </svg>
+                        Hasta
+                    </label>
+                    <input type="date" id="hasta">
+                    <div class="input-line"></div>
+                </div>
+
+                <button id="btnBuscar" class="btn btn-primary">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="m21 21-4.35-4.35"/>
+                    </svg>
+                    Buscar
+                </button>
+
+                <button id="btnExcel" class="btn btn-excel">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="12" y1="18" x2="12" y2="12"/>
+                        <line x1="9" y1="15" x2="15" y2="15"/>
+                    </svg>
+                    Exportar Excel
+                </button>
+            </section>
+        </section>
+
+        <!-- Tabla de resultados -->
+        <div class="table-section">
+            <div class="table-header">
+                <div class="table-title">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z"/>
+                    </svg>
+                    <h2>Resultados</h2>
+                </div>
+                <div class="results-count">
+                    <span id="totalResultados">0</span> compras encontradas
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table id="tablaReportes">
+                    <thead>
+                        <tr>
+                            <th>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="12" y1="1" x2="12" y2="23"/>
+                                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                                </svg>
+                                ID
+                            </th>
+                            <th>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                    <circle cx="12" cy="7" r="4"/>
+                                </svg>
+                                Proveedor
+                            </th>
+                            <th>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                    <polyline points="14 2 14 8 20 8"/>
+                                </svg>
+                                Factura
+                            </th>
+                            <th>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                    <line x1="16" y1="2" x2="16" y2="6"/>
+                                    <line x1="8" y1="2" x2="8" y2="6"/>
+                                    <line x1="3" y1="10" x2="21" y2="10"/>
+                                </svg>
+                                Fecha
+                            </th>
+                            <th>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="12" y1="1" x2="12" y2="23"/>
+                                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                                </svg>
+                                Total
+                            </th>
+                            <th>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                    <polyline points="22 4 12 14.01 9 11.01"/>
+                                </svg>
+                                Estado
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Se llena desde JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/compras-reportes.js"></script>
+    <script>
+        // Animaciones de entrada
+        window.addEventListener('load', () => {
+            const sections = document.querySelectorAll('.filtros-card, .table-section');
+            sections.forEach((section, index) => {
+                setTimeout(() => {
+                    section.classList.add('appear');
+                }, index * 200);
+            });
+
+            // Animación de campos
+            setTimeout(() => {
+                const campos = document.querySelectorAll('.campo');
+                campos.forEach((campo, index) => {
+                    setTimeout(() => {
+                        campo.classList.add('appear');
+                    }, index * 80);
+                });
+            }, 400);
+        });
+
+        // Focus en inputs
+        document.querySelectorAll('input, select').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.closest('.campo').classList.add('focused');
+            });
+            input.addEventListener('blur', function() {
+                if (!this.value) {
+                    this.closest('.campo').classList.remove('focused');
+                }
+            });
+        });
+
+        // Animación en botones
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                this.classList.add('clicked');
+                setTimeout(() => {
+                    this.classList.remove('clicked');
+                }, 300);
+            });
+        });
+
+        // Contar resultados (simulado - tu JS real lo hará)
+        const observer = new MutationObserver(() => {
+            const rows = document.querySelectorAll('#tablaReportes tbody tr');
+            document.getElementById('totalResultados').textContent = rows.length;
+        });
+        
+        const tbody = document.querySelector('#tablaReportes tbody');
+        if (tbody) {
+            observer.observe(tbody, { childList: true });
+        }
+    </script>
+</body>
+</html>

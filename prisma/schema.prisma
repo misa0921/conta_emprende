@@ -1,0 +1,244 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/**
+ * ====================================
+ * ENUMS
+ * ====================================
+ */
+
+enum TipoPersona {
+  CLIENTE
+  PROVEEDOR
+}
+
+enum IvaTipo {
+  CERO // 0%
+  QUINCE // 15%
+  NO_OBJETO // no objeto de IVA
+}
+
+enum FormaPago {
+  CAJA_CHICA
+  BANCO
+}
+
+enum EstadoCompra {
+  PAGADA
+  PENDIENTE
+}
+
+enum EstadoVenta {
+  COBRADA
+  PENDIENTE
+}
+
+enum EstadoInventario {
+  EN_USO
+  DANADO
+}
+
+enum BancoTipo {
+  AHORRO
+  CORRIENTE
+}
+
+enum TipoCuenta {
+  BANCO
+  CAJA_CHICA
+}
+
+/**
+ * ====================================
+ * MODELOS
+ * ====================================
+ */
+
+/**
+ * USUARIO
+ */
+model Usuario {
+  id        Int      @id @default(autoincrement())
+  nombre    String
+  correo    String   @unique
+  password  String
+  createdAt DateTime @default(now())
+
+  compras           Compra[]
+  ventas            Venta[]
+  movimientosCuenta MovimientoCuenta[]
+}
+
+/**
+ * PERSONA — UNIFICACIÓN (Cliente y Proveedor)
+ */
+model Persona {
+  id      Int         @id @default(autoincrement())
+  cedula  String      @unique
+  nombre  String
+  sexo    String?
+  celular String?
+  correo  String?
+  tipo    TipoPersona
+
+  compras   Compra[]   @relation("ProveedorCompras")
+  ventas    Venta[]    @relation("ClienteVentas")
+  productos Producto[]
+}
+
+/**
+ * PRODUCTOS — INVENTARIO
+ */
+model Producto {
+  id             Int                    @id @default(autoincrement())
+  nombre         String
+  descripcion    String?
+  precio_compra  Float
+  precio_venta   Float
+  stock          Int                    @default(0)
+  estado         EstadoInventario       @default(EN_USO)
+  fecha_creado   DateTime               @default(now())
+  proveedorId    Int?
+  proveedor      Persona?               @relation(fields: [proveedorId], references: [id])
+  compraDetalles CompraDetalle[]
+  ventaDetalles  VentaDetalle[]
+  movimientos    MovimientoInventario[]
+}
+
+/**
+ * COMPRA (CABECERA)
+ */
+model Compra {
+  id               Int          @id @default(autoincrement())
+  proveedorId      Int
+  usuarioId        Int
+  num_factura      String
+  num_autorizacion String
+  fecha_emision    DateTime     @default(now())
+  base             Float
+  iva              Float
+  iva_tipo         IvaTipo
+  total            Float
+  forma_pago       FormaPago
+  estado           EstadoCompra @default(PENDIENTE)
+  creadoEn         DateTime     @default(now())
+
+  proveedor Persona            @relation("ProveedorCompras", fields: [proveedorId], references: [id])
+  usuario   Usuario            @relation(fields: [usuarioId], references: [id])
+  detalles  CompraDetalle[]
+  pagos     MovimientoCuenta[]
+}
+
+/**
+ * DETALLE DE COMPRA
+ */
+model CompraDetalle {
+  id          Int   @id @default(autoincrement())
+  compraId    Int
+  productoId  Int
+  cantidad    Int
+  precio_unit Float
+  subtotal    Float
+
+  compra   Compra   @relation(fields: [compraId], references: [id], onDelete: Cascade)
+  producto Producto @relation(fields: [productoId], references: [id])
+}
+
+/**
+ * VENTA (CABECERA)
+ */
+model Venta {
+  id               Int         @id @default(autoincrement())
+  clienteId        Int
+  usuarioId        Int
+  num_factura      String
+  num_autorizacion String
+  fecha_emision    DateTime    @default(now())
+  base             Float
+  iva              Float
+  iva_tipo         IvaTipo
+  total            Float
+  forma_pago       FormaPago
+  estado           EstadoVenta @default(PENDIENTE)
+  creadoEn         DateTime    @default(now())
+
+  cliente  Persona            @relation("ClienteVentas", fields: [clienteId], references: [id])
+  usuario  Usuario            @relation(fields: [usuarioId], references: [id])
+  detalles VentaDetalle[]
+  cobros   MovimientoCuenta[]
+}
+
+/**
+ * DETALLE DE VENTA
+ */
+model VentaDetalle {
+  id          Int   @id @default(autoincrement())
+  ventaId     Int
+  productoId  Int
+  cantidad    Int
+  precio_unit Float
+  subtotal    Float
+
+  venta    Venta    @relation(fields: [ventaId], references: [id], onDelete: Cascade)
+  producto Producto @relation(fields: [productoId], references: [id])
+}
+
+/**
+ * KARDEX — MOVIMIENTOS DE INVENTARIO
+ */
+model MovimientoInventario {
+  id             Int      @id @default(autoincrement())
+  productoId     Int
+  tipo           String // ENTRADA o SALIDA
+  cantidad       Int
+  costo_unitario Float
+  costo_total    Float
+  stock_antes    Int
+  stock_despues  Int
+  fecha          DateTime @default(now())
+  referenciaTipo String? // COMPRA / VENTA
+  referenciaId   Int? // ID origen
+
+  producto Producto @relation(fields: [productoId], references: [id])
+}
+
+/**
+ * CUENTA (BANCO / CAJA CHICA)
+ */
+model Cuenta {
+  id          Int           @id @default(autoincrement())
+  nombre      String
+  tipo        TipoCuenta    // BANCO | CAJA_CHICA
+  saldo       Float         @default(0)
+  creadoEn    DateTime      @default(now())
+  bancoNombre String?       // null si es caja chica
+  bancoTipo   BancoTipo?    // AHORRO | CORRIENTE (solo si tipo=BANCO)
+  movimientos MovimientoCuenta[]
+}
+
+
+/**
+ * MOVIMIENTOS DE CUENTA
+ */
+model MovimientoCuenta {
+  id         Int      @id @default(autoincrement())
+  cuentaId   Int
+  tipo       String // PAGO | COBRO | AJUSTE
+  monto      Float
+  fecha      DateTime @default(now())
+  referencia String?
+  compraId   Int?
+  ventaId    Int?
+  usuarioId  Int?
+
+  cuenta  Cuenta   @relation(fields: [cuentaId], references: [id])
+  compra  Compra?  @relation(fields: [compraId], references: [id])
+  venta   Venta?   @relation(fields: [ventaId], references: [id])
+  usuario Usuario? @relation(fields: [usuarioId], references: [id])
+}

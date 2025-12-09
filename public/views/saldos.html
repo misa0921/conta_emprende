@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saldos Bancarios | ContaEmprende</title>
+    <link rel="stylesheet" href="../css/saldos.css">
+</head>
+<body>
+    <!-- Fondo animado -->
+    <div class="animated-background"></div>
+
+    <!-- Botón Volver flotante -->
+    <button class="btn-volver" onclick="window.location.href='dashboard.html'">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        Volver
+    </button>
+
+    <div class="container">
+        <!-- Header -->
+        <header class="page-header">
+            <div class="header-icon">
+                <svg width="35" height="35" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="6" width="20" height="12" rx="2"/>
+                    <path d="M16 10a4 4 0 0 1-8 0"/>
+                    <path d="M12 14v4"/>
+                    <path d="M8 18h8"/>
+                </svg>
+            </div>
+            <div class="header-content">
+                <h1>Saldos Bancarios</h1>
+                <p>Consulta el estado de tus cuentas y movimientos</p>
+                <div class="header-info">
+                    <span class="total-saldos">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="1" x2="12" y2="23"/>
+                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                        </svg>
+                        Total Saldos: <span id="totalSaldos">$0.00</span>
+                    </span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Resumen de saldos -->
+        <section class="resumen-section">
+            <div class="section-header">
+                <div class="section-title">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z"/>
+                    </svg>
+                    <h2>Resumen de Cuentas</h2>
+                </div>
+                <div class="section-actions">
+                    <button class="btn-refresh" onclick="actualizarSaldos()">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M23 4v6h-6M1 20v-6h6"/>
+                            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+                        </svg>
+                        Actualizar
+                    </button>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table id="resumen-table">
+                    <thead>
+                        <tr>
+                            <th>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="2" y="6" width="20" height="12" rx="2"/>
+                                    <path d="M16 10a4 4 0 0 1-8 0"/>
+                                </svg>
+                                Cuenta
+                            </th>
+                            <th>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                </svg>
+                                Tipo
+                            </th>
+                            <th>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="12" y1="1" x2="12" y2="23"/>
+                                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                                </svg>
+                                Saldo Disponible
+                            </th>
+                            <th>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                                    <polyline points="15 3 21 3 21 9"/>
+                                    <line x1="10" y1="14" x2="21" y2="3"/>
+                                </svg>
+                                Acción
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="cuentas-container">
+                        <!-- Las cuentas se cargarán aquí dinámicamente -->
+                        <tr class="loading-row">
+                            <td colspan="4">
+                                <div class="loading-spinner">
+                                    <div class="spinner"></div>
+                                    <span>Cargando cuentas...</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Estadísticas -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="6" width="20" height="12" rx="2"/>
+                        <path d="M16 10a4 4 0 0 1-8 0"/>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <h3>Cuentas Totales</h3>
+                    <p class="stat-number" id="totalCuentas">0</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="1" x2="12" y2="23"/>
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <h3>Saldo Bancario</h3>
+                    <p class="stat-number" id="saldoBancario">$0.00</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 1v22M5 6h7a5 5 0 0 1 0 10H5"/>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <h3>Saldo Caja Chica</h3>
+                    <p class="stat-number" id="saldoCaja">$0.00</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="12" x2="21" y2="12"/>
+                        <line x1="3" y1="6" x2="21" y2="6"/>
+                        <line x1="3" y1="18" x2="21" y2="18"/>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <h3>Último Movimiento</h3>
+                    <p class="stat-number" id="ultimoMovimiento">-</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de movimientos -->
+    <div id="modal-movimientos" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                        <polyline points="15 3 21 3 21 9"/>
+                        <line x1="10" y1="14" x2="21" y2="3"/>
+                    </svg>
+                    <h3>Movimientos de la Cuenta</h3>
+                </div>
+                <span class="close-modal" onclick="cerrarModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="cuenta-info" id="modalCuentaInfo">
+                    <span class="cuenta-nombre">Banco Nacional</span>
+                    <span class="cuenta-saldo">$5,000.00</span>
+                </div>
+                <div class="table-container">
+                    <table id="tabla-movimientos">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                        <line x1="16" y1="2" x2="16" y2="6"/>
+                                        <line x1="8" y1="2" x2="8" y2="6"/>
+                                        <line x1="3" y1="10" x2="21" y2="10"/>
+                                    </svg>
+                                    Fecha
+                                </th>
+                                <th>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <line x1="12" y1="1" x2="12" y2="23"/>
+                                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                                    </svg>
+                                    Monto
+                                </th>
+                                <th>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                        <polyline points="14 2 14 8 20 8"/>
+                                    </svg>
+                                    Referencia
+                                </th>
+                                <th>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"/>
+                                        <path d="M12 8v4M12 16h.01"/>
+                                    </svg>
+                                    Tipo
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Los movimientos se cargarán aquí -->
+                            <tr>
+                                <td colspan="4" class="empty-state">
+                                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"/>
+                                        <line x1="8" y1="12" x2="16" y2="12"/>
+                                    </svg>
+                                    <p>No hay movimientos registrados</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-modal" onclick="exportarMovimientos()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="12" y1="18" x2="12" y2="12"/>
+                        <line x1="9" y1="15" x2="15" y2="15"/>
+                    </svg>
+                    Exportar Excel
+                </button>
+                <button class="btn-modal btn-print" onclick="imprimirMovimientos()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 6 2 18 2 18 9"/>
+                        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+                        <rect x="6" y="14" width="12" height="8"/>
+                    </svg>
+                    Imprimir
+                </button>
+                <button class="btn-modal btn-close" onclick="cerrarModal()">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/saldos.js"></script>
+    <script>
+        // Animaciones básicas
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animaciones de entrada
+            const elements = ['.page-header', '.resumen-section', '.stats-grid'];
+            elements.forEach((selector, index) => {
+                const element = document.querySelector(selector);
+                if (element) {
+                    setTimeout(() => {
+                        element.classList.add('appear');
+                    }, index * 300);
+                }
+            });
+
+            // Configurar modal
+            const modal = document.getElementById('modal-movimientos');
+            const closeBtn = modal.querySelector('.close-modal');
+            
+            closeBtn.addEventListener('click', () => {
+                modal.classList.remove('active');
+            });
+
+            window.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                }
+            });
+        });
+
+        // Funciones para el modal (simuladas)
+        window.verMovimientos = function(cuentaId, nombreCuenta, saldo) {
+            const modal = document.getElementById('modal-movimientos');
+            const cuentaInfo = document.getElementById('modalCuentaInfo');
+            
+            // Actualizar información de la cuenta
+            cuentaInfo.querySelector('.cuenta-nombre').textContent = nombreCuenta;
+            cuentaInfo.querySelector('.cuenta-saldo').textContent = saldo;
+            
+            // Mostrar modal
+            modal.classList.add('active');
+            
+            // Aquí cargarías los movimientos desde tu backend
+            console.log('Cargando movimientos para cuenta:', cuentaId);
+        };
+
+        window.cerrarModal = function() {
+            const modal = document.getElementById('modal-movimientos');
+            modal.classList.remove('active');
+        };
+
+        window.exportarMovimientos = function() {
+            alert('Exportando movimientos a Excel...');
+            // Tu lógica de exportación aquí
+        };
+
+        window.imprimirMovimientos = function() {
+            window.print();
+        };
+
+        window.actualizarSaldos = function() {
+            const btn = document.querySelector('.btn-refresh');
+            btn.classList.add('loading');
+            
+            // Simular actualización
+            setTimeout(() => {
+                btn.classList.remove('loading');
+                alert('Saldos actualizados');
+                // Aquí llamarías a tu función de actualización real
+            }, 1000);
+        };
+
+        // Simular datos de ejemplo
+        setTimeout(() => {
+            // Ejemplo de datos
+            document.getElementById('totalSaldos').textContent = '$12,500.75';
+            document.getElementById('totalCuentas').textContent = '4';
+            document.getElementById('saldoBancario').textContent = '$10,250.50';
+            document.getElementById('saldoCaja').textContent = '$2,250.25';
+            document.getElementById('ultimoMovimiento').textContent = 'Hoy';
+        }, 1500);
+    </script>
+</body>
+</html>
