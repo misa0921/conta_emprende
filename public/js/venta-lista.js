@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => cargarVentas());
 
 async function cargarVentas() {
     try {
-        const res = await fetch(`${API}/ventas`);
+        const res = await fetch(`${API}/api/ventas`);
         const json = await res.json();
 
         const ventas = json.ventas ?? json.data;

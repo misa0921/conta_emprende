@@ -1,8 +1,8 @@
+const API = "https://contaemprende-production-eb68.up.railway.app/api";
+
 // ===============================
 // CARGAR PROVEEDORES
 // ===============================
-const API = "https://contaemprende-production-eb68.up.railway.app";
-
 async function cargarProveedores(seleccionado = null) {
     try {
         const res = await fetch(`${API}/personas/proveedores`);
@@ -25,7 +25,6 @@ async function cargarProveedores(seleccionado = null) {
         console.error("Error cargando proveedores:", error);
     }
 }
-
 
 // ===============================
 // SI HAY ID → MODO EDICIÓN
@@ -62,7 +61,6 @@ async function cargarProductoParaEditar(id) {
     }
 }
 
-
 // ===============================
 // REGISTRAR / ACTUALIZAR PRODUCTO
 // ===============================
@@ -80,32 +78,36 @@ document.getElementById("productoForm").addEventListener("submit", async (e) => 
     };
 
     const url = idEditar ? `${API}/productos/${idEditar}` : `${API}/productos`;
-
-
     const metodo = idEditar ? "PUT" : "POST";
 
-    const res = await fetch(url, {
-        method: metodo,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-    });
+    try {
+        const res = await fetch(url, {
+            method: metodo,
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        });
 
-    const json = await res.json();
+        const json = await res.json();
+        const msg = document.getElementById("msg");
 
-    const msg = document.getElementById("msg");
+        if (json.ok) {
+            msg.style.color = "green";
+            msg.innerText = idEditar
+                ? "Producto actualizado correctamente ✔"
+                : "Producto registrado correctamente ✔";
 
-    if (json.ok) {
-        msg.style.color = "green";
-        msg.innerText = idEditar
-            ? "Producto actualizado correctamente ✔"
-            : "Producto registrado correctamente ✔";
+            setTimeout(() => {
+                window.location.href = "inventario.html";
+            }, 1000);
 
-        setTimeout(() => {
-            window.location.href = "inventario.html";
-        }, 1000);
-
-    } else {
+        } else {
+            msg.style.color = "red";
+            msg.innerText = "Error: " + (json.msg || "Intente de nuevo");
+        }
+    } catch (error) {
+        const msg = document.getElementById("msg");
         msg.style.color = "red";
-        msg.innerText = "Error: " + (json.msg || "Intente de nuevo");
+        msg.innerText = "Error de conexión. Por favor, intente nuevamente";
+        console.error("Error registrando/actualizando producto:", error);
     }
 });

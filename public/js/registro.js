@@ -1,5 +1,4 @@
-
-const API = "https://contaemprende-production-eb68.up.railway.app";
+const API = "https://contaemprende-production-eb68.up.railway.app/api";
 
 const tipoSelect = document.getElementById("tipoPersona");
 const campoSexo = document.getElementById("campo-sexo");
@@ -27,7 +26,6 @@ if (tipoSelect && campoSexo) {
     });
 }
 
-
 // === REGISTRAR PERSONA ===
 document.getElementById("btnRegistrar").addEventListener("click", async () => {
 
@@ -48,24 +46,24 @@ document.getElementById("btnRegistrar").addEventListener("click", async () => {
     }
 
     try {
+        // CORRECCIÓN: ruta /api/personas
         const res = await fetch(`${API}/personas`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ cedula, nombre, sexo, celular, correo, tipo })
         });
 
-
         const data = await res.json();
 
         if (data.ok) {
             msg.className = "msg success";
-            msg.innerText = "se registro correctamente";
-            
-        setTimeout(() => {
-            document.getElementById("registroForm").reset();
-            msg.innerText = "";           // Limpia contenido pero NO lo borra visualmente
-            msg.className = "msg fade";   // Le bajamos presencia suavemente
-        }, 3000);
+            msg.innerText = "Se registró correctamente";
+
+            setTimeout(() => {
+                document.getElementById("registroForm").reset();
+                msg.innerText = "";           // Limpia contenido pero NO lo borra visualmente
+                msg.className = "msg fade";   // Le bajamos presencia suavemente
+            }, 3000);
 
         } else {
             msg.className = "msg error";

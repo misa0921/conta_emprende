@@ -6,6 +6,9 @@ const compraId = params.get("id");
 
 let formaPago = null;
 
+// Cambié la URL global de API a producción
+const API = "https://contaemprende-production-eb68.up.railway.app/api";
+
 document.addEventListener("DOMContentLoaded", init);
 
 async function init() {
@@ -37,8 +40,8 @@ async function cargarCompra() {
   const infoContent = document.querySelector("#infoCompra .info-content");
   
   try {
-  const API_URL = "https://contaemprende-production-eb68.up.railway.app";
-  const res = await fetch(`${API_URL}/api/compras/detalle/${compraId}`);
+    // Uso de API global
+    const res = await fetch(`${API}/compras/detalle/${compraId}`);
     if (!res.ok) throw new Error("Error al cargar compra");
 
     const json = await res.json();
@@ -189,7 +192,8 @@ async function pagarCompra() {
     btnPagar.disabled = true;
     btnPagar.innerHTML = '<span>Procesando...</span>';
 
-  const res = await fetch(`http://localhost:3000/api/compras/${compraId}/pagar`, {
+    // Cambié la URL a producción
+    const res = await fetch(`${API}/compras/${compraId}/pagar`, {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify(payload)

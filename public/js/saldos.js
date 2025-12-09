@@ -6,7 +6,8 @@ const tablaMovimientos = document.querySelector('#tabla-movimientos tbody');
 async function cargarSaldos() {
   try {
     const resCuentas = await fetch(`${API}/saldos`);
-    const cuentas = await resCuentas.json();
+    const json = await resCuentas.json();
+    const cuentas = Array.isArray(json) ? json : json.data ?? [];
     const container = document.getElementById('cuentas-container');
 
     // Calcular estadísticas
@@ -109,8 +110,8 @@ async function verMovimientos(cuentaId, nombreCuenta, saldo) {
     modal.classList.add('active');
 
     // Cargar movimientos
-    const res = await fetch(`${API}/saldos/movimientos/${cuentaId}`)
-;
+    const res = await fetch(`${API}/saldos/movimientos/${cuentaId}`);
+
     const movimientos = await res.json();
 
     // Limpiar tabla
