@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: conta-emprende
+    env: node
+    region: ohio  # Puedes elegir otra región si quieres
+    plan: free
+    buildCommand: "npm install"
+    startCommand: "npm start"
+    envVars:
+      DATABASE_URL: "file:./dev.db"
