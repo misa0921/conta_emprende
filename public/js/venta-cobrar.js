@@ -1,163 +1,228 @@
-const API = "https://contaemprende-production-eb68.up.railway.app";
-const urlParams = new URLSearchParams(window.location.search);
-const ventaId = urlParams.get("id");
+/* ======================= 
+     OBTENER ID DE VENTA 
+======================= */
+const params = new URLSearchParams(window.location.search);
+const ventaId = params.get("id");
 
-document.addEventListener("DOMContentLoaded", async () => {
-    if (!ventaId) {
-        alert("No se encontró la venta a cobrar.");
-        window.location.href = "venta.html";
-        return;
-    }
+let formaPago = null;
 
-    await cargarVenta();
-    document.getElementById("btnCobrar").addEventListener("click", cobrarVenta);
-    document.getElementById("btnCancelar").addEventListener("click", () => {
-        window.location.href = "venta.html";
-    });
-});
+// API en producción
+const API = "https://contaemprende-production-eb68.up.railway.app/api";
 
+document.addEventListener("DOMContentLoaded", init);
+
+async function init() {
+  if (!ventaId) return showMessage("No se especificó ID de venta.", true);
+
+  await cargarVenta();
+  adaptarFormulario();
+  setupBotones();
+}
+
+/* =======================
+   Mostrar mensajes
+======================= */
+function showMessage(msg, error = false) {
+  const el = document.getElementById("mensaje");
+  el.textContent = msg;
+  el.className = error ? "mensaje error" : "mensaje success";
+  el.style.display = "block";
+  
+  setTimeout(() => {
+    el.style.display = "none";
+  }, 5000);
+}
+
+/* =======================
+   Cargar venta - DISEÑO LIMPIO
+======================= */
 async function cargarVenta() {
-    try {
-        const res = await fetch(`${API}/api/ventas/detalle/${ventaId}`);
-        const json = await res.json();
-        if (!json.ok) return alert("Error cargando venta");
+  const infoContent = document.querySelector("#infoVenta .info-content");
+  
+  try {
+    const res = await fetch(`${API}/api/ventas/detalle/${ventaId}`);
+    if (!res.ok) throw new Error("Error al cargar venta");
 
-        const venta = json.venta;
+    const json = await res.json();
+    const v = json.venta ?? json.data ?? json;
 
-        const infoDiv = document.getElementById("infoVenta");
-        infoDiv.innerHTML = ""; // Limpiar contenido previo
+    formaPago = v.forma_pago ?? v.formaPago ?? null;
+    document.getElementById("metodoPago").value = formaPago === 'CAJA_CHICA' ? 'Caja Chica' : 'Banco';
 
-        // Cabecera de información
-        const infoLista = document.createElement("ul");
-        infoLista.style.listStyle = "none";
-        infoLista.style.padding = "0";
+    const detalles = v.detalles ?? [];
 
-        const datos = [
-            ["Cliente", venta.cliente.nombre],
-            ["Factura", venta.num_factura],
-            ["Fecha", new Date(venta.fecha_emision).toLocaleDateString()],
-            ["Total", `$${venta.total.toFixed(2)}`],
-            ["Estado", venta.estado],
-        ];
+    // HTML simple y limpio
+    infoContent.innerHTML = `
+        <div class="compra-info-simple">
+            <div class="info-row">
+                <label>Cliente:</label>
+                <span class="value">${v.cliente?.nombre ?? 'Sin cliente'}</span>
+            </div>
 
-        datos.forEach(([label, valor]) => {
-            const li = document.createElement("li");
-            li.innerHTML = `<strong>${label}:</strong> ${valor}`;
-            infoLista.appendChild(li);
-        });
+            <div class="info-row">
+                <label>N° Factura:</label>
+                <span class="value">${v.num_factura ?? '---'}</span>
+            </div>
 
-        infoDiv.appendChild(infoLista);
+            <div class="info-row">
+                <label>N° Autorización:</label>
+                <span class="value">${v.num_autorizacion ?? '---'}</span>
+            </div>
 
-        // Tabla de detalles
-        if (venta.detalles && venta.detalles.length > 0) {
-            const tabla = document.createElement("table");
-            tabla.style.width = "100%";
-            tabla.style.borderCollapse = "collapse";
-            tabla.style.marginTop = "10px";
+            <div class="info-row">
+                <label>Fecha:</label>
+                <span class="value">${new Date(v.fecha ?? v.fecha_emision).toLocaleDateString()}</span>
+            </div>
 
-            // Cabecera
-            const thead = document.createElement("thead");
-            thead.innerHTML = `
-                <tr>
-                    <th style="border-bottom:1px solid #ccc; text-align:left;">Producto</th>
-                    <th style="border-bottom:1px solid #ccc; text-align:right;">Cantidad</th>
-                    <th style="border-bottom:1px solid #ccc; text-align:right;">Precio Unitario</th>
-                    <th style="border-bottom:1px solid #ccc; text-align:right;">Subtotal</th>
-                </tr>
-            `;
-            tabla.appendChild(thead);
+            <div class="info-row highlight">
+                <label>Forma de pago registrada:</label>
+                <span class="value">${formaPago === 'CAJA_CHICA' ? 'Caja Chica' : 'Banco'}</span>
+            </div>
+        </div>
 
-            // Cuerpo
-            const tbody = document.createElement("tbody");
-            venta.detalles.forEach(d => {
-                const tr = document.createElement("tr");
-                tr.innerHTML = `
-                    <td>${d.producto.nombre}</td>
-                    <td style="text-align:right;">${d.cantidad}</td>
-                    <td style="text-align:right;">$${d.precio_unit.toFixed(2)}</td>
-                    <td style="text-align:right;">$${d.subtotal.toFixed(2)}</td>
-                `;
-                tbody.appendChild(tr);
-            });
-            tabla.appendChild(tbody);
+        ${detalles.length > 0 ? `
+        <div class="productos-simple">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Precio Unit.</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${detalles.map(d => `
+                        <tr>
+                            <td>${d.producto?.nombre ?? d.nombre ?? 'Producto'}</td>
+                            <td>${d.cantidad}</td>
+                            <td>$${Number(d.precio_unit ?? d.precio_unitario).toFixed(2)}</td>
+                            <td>$${Number(d.subtotal).toFixed(2)}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+        </div>
+        ` : '<p style="text-align:center; padding:20px; color:#718096;">No hay productos</p>'}
 
-            infoDiv.appendChild(tabla);
-        }
-
-        // Forma de pago
-        const metodoPago = document.getElementById("metodoPago");
-        metodoPago.value = venta.forma_pago;
-
-        // Muestra/oculta área de banco según forma de pago
-        toggleBanco(venta.forma_pago);
-        
-        // Valor por defecto del saldo
-        document.getElementById("saldoManual").value = 0;
-
-    } catch (err) {
-        console.error("Error cargando venta:", err);
-        alert("Error al cargar la venta desde el servidor");
-    }
+        <div class="totales-simple">
+            <div class="total-simple">
+                <span>Subtotal:</span>
+                <span class="value">$${Number(v.base).toFixed(2)}</span>
+            </div>
+            <div class="total-simple">
+                <span>IVA:</span>
+                <span class="value">$${Number(v.iva).toFixed(2)}</span>
+            </div>
+            <div class="total-simple final">
+                <span>Total a cobrar:</span>
+                <span class="value" id="totalCobrar">$${Number(v.total).toFixed(2)}</span>
+            </div>
+        </div>
+    `;
+  } catch (err) {
+    console.error(err);
+    infoContent.innerHTML = `<p style="color:red; text-align:center; padding:40px;">Error al cargar la venta</p>`;
+  }
 }
 
-function toggleBanco(formaPago) {
-    document.getElementById("areaBanco").style.display = formaPago === "BANCO" ? "block" : "none";
+/* =======================
+   Adaptar UI según forma de pago
+======================= */
+function adaptarFormulario() {
+  const areaBanco = document.getElementById("areaBanco");
+  if (formaPago === "BANCO") {
+    areaBanco.style.display = "block";
+  } else {
+    areaBanco.style.display = "none";
+  }
 }
 
+/* =======================
+    BOTONES
+======================= */
+function setupBotones() {
+  document.getElementById("btnCancelar").onclick = () => history.back();
+  document.getElementById("btnCobrar").onclick = cobrarVenta;
+}
+
+/* =======================
+      GUARDAR COBRO
+======================= */
 async function cobrarVenta() {
-    const metodo = document.getElementById("metodoPago").value;
-    // ✅ Corregido: usar el id correcto del HTML
-    const permitirSaldoNegativo = document.getElementById("permitirNegativo")?.checked || false;
-    
-    const body = {
-        permitirSaldoNegativo
+  const permitirNegativo = document.getElementById("permitirNegativo").checked;
+  const saldo = Number(document.getElementById("saldoManual").value);
+
+  if (!saldo && !permitirNegativo)
+    return showMessage("Ingrese saldo o permita negativo", true);
+
+  let cuenta = null;
+
+  if (formaPago === "BANCO") {
+    const bancoNombre = document.getElementById("bancoNombre").value.trim();
+    const tipoCuenta = document.getElementById("bancoTipoCuenta").value;
+    const numeroCuenta = document.getElementById("numeroCuenta").value.trim();
+
+    if (!bancoNombre || !numeroCuenta)
+      return showMessage("Complete todos los datos del banco", true);
+
+    cuenta = {
+      nombre: bancoNombre,
+      tipo: "BANCO",
+      saldo: saldo,
+      bancoTipo: tipoCuenta
     };
+  } else {
+    cuenta = {
+      nombre: "Caja Chica",
+      tipo: "CAJA_CHICA",
+      saldo: saldo
+    };
+  }
 
-    // ✅ Solo agregar cuenta si el método de pago es BANCO
-    if (metodo === "BANCO") {
-        const bancoNombre = document.getElementById("bancoNombre").value.trim();
-        const bancoTipoCuenta = document.getElementById("bancoTipoCuenta").value;
-        const numeroCuenta = document.getElementById("numeroCuenta").value.trim();
-        const saldo = Number(document.getElementById("saldoManual").value) || 0;
+  const payload = {
+    permitirSaldoNegativo: permitirNegativo,
+    cuenta
+  };
 
-        // Validaciones para BANCO
-        if (!bancoNombre) {
-            alert("Por favor ingrese el nombre del banco");
-            return;
-        }
-        if (!numeroCuenta) {
-            alert("Por favor ingrese el número de cuenta");
-            return;
-        }
+  try {
+    const btnCobrar = document.getElementById("btnCobrar");
+    btnCobrar.disabled = true;
+    btnCobrar.innerHTML = '<span>Procesando...</span>';
 
-        body.cuenta = {
-            nombre: `${bancoNombre} - ${bancoTipoCuenta} - ${numeroCuenta}`,
-            tipo: "BANCO",
-            saldo: saldo
-        };
+    const res = await fetch(`${API}/api/ventas/${ventaId}/cobrar`, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(payload)
+    });
+
+    const json = await res.json();
+    
+    if (!json.ok) {
+      btnCobrar.disabled = false;
+      btnCobrar.innerHTML = `
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        <span>Cobrar Ahora</span>
+      `;
+      return showMessage(`${json.msg || "Error procesando cobro"}`, true);
     }
-    // ✅ Si es CAJA_CHICA, no enviamos nada de cuenta (pago directo en efectivo)
 
-    try {
-        const res = await fetch(`${API}/api/ventas/${ventaId}/cobrar`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(body)
-        });
+    showMessage("Cobro registrado con éxito");
+    setTimeout(() => location.href = `venta-detalle.html?id=${ventaId}`, 1500);
 
-        const json = await res.json();
-        
-        if (!json.ok) {
-            alert(`❌ Error: ${json.msg}`);
-            return;
-        }
-
-        console.log("Respuesta del servidor:", json);
-        alert("✅ Venta cobrada exitosamente");
-        window.location.href = "venta.html";
-        
-    } catch (err) {
-        console.error("Error al cobrar la venta:", err);
-        alert("❌ Error al procesar el cobro");
-    }
+  } catch (e) {
+    console.error(e);
+    showMessage("Error al conectar con servidor", true);
+    
+    const btnCobrar = document.getElementById("btnCobrar");
+    btnCobrar.disabled = false;
+    btnCobrar.innerHTML = `
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+      <span>Cobrar Ahora</span>
+    `;
+  }
 }
