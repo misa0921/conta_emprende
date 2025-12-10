@@ -7,7 +7,7 @@ const ventaId = params.get("id");
 let formaPago = null;
 
 // API en producción
-const API = "https://contaemprende-production-eb68.up.railway.app/api";
+const API = "https://contaemprende-production-eb68.up.railway.app";
 
 document.addEventListener("DOMContentLoaded", init);
 
