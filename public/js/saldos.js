@@ -1,4 +1,4 @@
-const API = "https://contaemprende-production-eb68.up.railway.app/api";  // ⚠️ AGREGADO /api
+const API = "https://contaemprende-production-eb68.up.railway.app/api";
 
 const modal = document.getElementById('modal-movimientos');
 const tablaMovimientos = document.querySelector('#tabla-movimientos tbody');
@@ -94,6 +94,8 @@ async function cargarSaldos() {
 
 async function verMovimientos(cuentaId, nombreCuenta, saldo) {
   try {
+    console.log('📡 Cargando movimientos para cuenta:', cuentaId);
+    
     // Actualizar información de la cuenta en el modal
     const cuentaInfo = document.getElementById('modalCuentaInfo');
     cuentaInfo.querySelector('.cuenta-nombre').textContent = nombreCuenta;
@@ -117,16 +119,21 @@ async function verMovimientos(cuentaId, nombreCuenta, saldo) {
     // Cargar movimientos
     const res = await fetch(`${API}/saldos/movimientos/${cuentaId}`);
     
+    console.log('📥 Response status:', res.status);
+    
     if (!res.ok) {
       throw new Error(`Error HTTP: ${res.status}`);
     }
 
     const movimientos = await res.json();
+    
+    console.log('📦 Movimientos recibidos:', movimientos);
+    console.log('📊 Total movimientos:', movimientos.length);
 
     // Limpiar tabla
     tablaMovimientos.innerHTML = '';
 
-    if (movimientos.length === 0) {
+    if (!Array.isArray(movimientos) || movimientos.length === 0) {
       tablaMovimientos.innerHTML = `
         <tr>
           <td colspan="4" class="empty-state">
@@ -139,33 +146,76 @@ async function verMovimientos(cuentaId, nombreCuenta, saldo) {
         </tr>
       `;
     } else {
-      movimientos.forEach(m => {
+      movimientos.forEach((m, index) => {
         const row = document.createElement('tr');
-        const fecha = new Date(m.fecha).toLocaleDateString('es-ES', {
+        
+        // Formatear fecha
+        const fecha = new Date(m.fecha).toLocaleDateString('es-EC', {
           year: 'numeric',
           month: 'short',
-          day: 'numeric'
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
         });
         
-        const tipoMovimiento = m.monto >= 0 ? 'Ingreso' : 'Egreso';
-        const colorMonto = m.monto >= 0 ? 'style="color: #38a169;"' : 'style="color: #e53e3e;"';
+        // ✅ CORRECCIÓN: Usar el campo 'tipo' del backend en lugar de calcular por monto
+        const tipoMovimiento = m.tipo || 'PAGO';
+        
+        // Determinar si es ingreso o egreso basado en el tipo
+        const esIngreso = tipoMovimiento === 'INGRESO' || tipoMovimiento === 'COBRO';
+        const colorMonto = esIngreso ? 'style="color: #38a169;"' : 'style="color: #e53e3e;"';
+        
+        // Formatear referencia
+        let referencia = m.referencia || '-';
+        if (m.compraId) {
+          referencia = `Compra #${m.compraId}`;
+        } else if (m.ventaId) {
+          referencia = `Venta #${m.ventaId}`;
+        }
+        
+        // Icono según tipo
+        let tipoIcon = '💰';
+        if (tipoMovimiento === 'INGRESO') tipoIcon = '⬆️';
+        else if (tipoMovimiento === 'PAGO') tipoIcon = '⬇️';
+        else if (tipoMovimiento === 'TRANSFERENCIA') tipoIcon = '🔄';
         
         row.innerHTML = `
-          <td>${fecha}</td>
-          <td ${colorMonto}><strong>$${Math.abs(m.monto).toFixed(2)}</strong></td>
-          <td>${m.compraId ? 'Compra #' + m.compraId : m.referencia || '-'}</td>
           <td>
-            <span class="tipo-badge ${m.monto >= 0 ? 'tipo-caja' : 'tipo-banco'}">
-              ${tipoMovimiento}
+            <span style="color: #718096; font-size: 14px;">
+              ${fecha}
+            </span>
+          </td>
+          <td ${colorMonto}>
+            <strong>$${parseFloat(m.monto).toFixed(2)}</strong>
+          </td>
+          <td>
+            <span style="color: #4a5568;">
+              ${referencia}
+            </span>
+          </td>
+          <td>
+            <span class="tipo-badge ${esIngreso ? 'tipo-caja' : 'tipo-banco'}" style="display: inline-flex; align-items: center; gap: 5px;">
+              <span>${tipoIcon}</span>
+              <span>${tipoMovimiento}</span>
             </span>
           </td>
         `;
+        
         tablaMovimientos.appendChild(row);
+        
+        console.log(`✅ Movimiento ${index + 1}:`, {
+          fecha: fecha,
+          tipo: tipoMovimiento,
+          monto: m.monto,
+          referencia: referencia
+        });
       });
+      
+      console.log('🎉 Movimientos renderizados correctamente');
     }
 
   } catch (error) {
-    console.error("Error al cargar movimientos:", error);
+    console.error("❌ Error al cargar movimientos:", error);
     tablaMovimientos.innerHTML = `
       <tr>
         <td colspan="4" style="text-align: center; padding: 40px; color: #e53e3e;">
