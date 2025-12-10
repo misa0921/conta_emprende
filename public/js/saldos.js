@@ -1,4 +1,4 @@
-const API = "https://contaemprende-production-eb68.up.railway.app";
+const API = "https://contaemprende-production-eb68.up.railway.app/api";  // ⚠️ AGREGADO /api
 
 const modal = document.getElementById('modal-movimientos');
 const tablaMovimientos = document.querySelector('#tabla-movimientos tbody');
@@ -6,6 +6,11 @@ const tablaMovimientos = document.querySelector('#tabla-movimientos tbody');
 async function cargarSaldos() {
   try {
     const resCuentas = await fetch(`${API}/saldos`);
+    
+    if (!resCuentas.ok) {
+      throw new Error(`Error HTTP: ${resCuentas.status}`);
+    }
+    
     const json = await resCuentas.json();
     const cuentas = Array.isArray(json) ? json : json.data ?? [];
     const container = document.getElementById('cuentas-container');
@@ -80,7 +85,7 @@ async function cargarSaldos() {
             <line x1="12" y1="16" x2="12.01" y2="16"/>
           </svg>
           <p><strong>Error al cargar los saldos</strong></p>
-          <p style="font-size: 14px; margin-top: 10px;">Por favor, intenta nuevamente más tarde</p>
+          <p style="font-size: 14px; margin-top: 10px;">${error.message}</p>
         </td>
       </tr>
     `;
@@ -111,6 +116,10 @@ async function verMovimientos(cuentaId, nombreCuenta, saldo) {
 
     // Cargar movimientos
     const res = await fetch(`${API}/saldos/movimientos/${cuentaId}`);
+    
+    if (!res.ok) {
+      throw new Error(`Error HTTP: ${res.status}`);
+    }
 
     const movimientos = await res.json();
 
@@ -166,6 +175,7 @@ async function verMovimientos(cuentaId, nombreCuenta, saldo) {
             <line x1="12" y1="16" x2="12.01" y2="16"/>
           </svg>
           <p><strong>Error al cargar los movimientos</strong></p>
+          <p style="font-size: 14px; margin-top: 10px;">${error.message}</p>
         </td>
       </tr>
     `;
