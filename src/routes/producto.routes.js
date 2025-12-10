@@ -4,7 +4,7 @@ import productoController from "../controllers/producto.controller.js";
 const router = Router();
 
 // PDF primero para evitar conflicto con "/:id"
-router.get("/reporte/pdf", productoController.generarPDF);
+router.get("/pdf", productoController.generarPDF);  // ← Cambiar a /pdf
 router.post("/", productoController.crearProducto);
 router.get("/", productoController.obtenerProductos);
 router.get("/:id", productoController.obtenerProductoPorId);
