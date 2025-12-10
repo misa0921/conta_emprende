@@ -130,20 +130,49 @@ async function eliminarProducto(id) {
     }
 }
 
+/**
+ * Generar reporte PDF del inventario
+ * ⚠️ CORREGIDA: Ahora con mejor manejo de errores y feedback
+ */
 async function generarPDF() {
     try {
-        const res = await fetch(`${API}/productos/reporte/pdf`);
+        console.log("🔄 Generando PDF...");
+        
+        // Hacer petición al backend
+        const res = await fetch(`${API}/productos/pdf`);
+        
+        // Verificar si la respuesta es exitosa
+        if (!res.ok) {
+            throw new Error(`Error HTTP: ${res.status} - ${res.statusText}`);
+        }
+        
+        // Obtener el blob del PDF
         const blob = await res.blob();
         
+        // Verificar que sea un PDF
+        if (blob.type !== 'application/pdf') {
+            throw new Error('La respuesta no es un PDF válido');
+        }
+        
         // Crear URL temporal y descargar
-        const url = window.URL.a(blob);
+        const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
         a.download = `inventario_${new Date().toISOString().split('T')[0]}.pdf`;
+        
+        // Agregar al DOM, hacer clic y limpiar
+        document.body.appendChild(a);
         a.click();
+        document.body.removeChild(a);
+        
+        // Liberar URL temporal
         window.URL.revokeObjectURL(url);
+        
+        console.log("✅ PDF generado exitosamente");
+        alert("✅ PDF generado exitosamente");
+        
     } catch (error) {
-        console.error("Error generando PDF:", error);
-        alert("Error al generar el PDF");
+        console.error("❌ Error generando PDF:", error);
+        alert(`❌ Error al generar el PDF:\n${error.message}\n\nVerifica que el servidor esté funcionando correctamente.`);
     }
 }
