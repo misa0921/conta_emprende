@@ -129,3 +129,21 @@ async function eliminarProducto(id) {
         alert("Error al eliminar el producto");
     }
 }
+
+async function generarPDF() {
+    try {
+        const res = await fetch(`${API}/productos/reporte/pdf`);
+        const blob = await res.blob();
+        
+        // Crear URL temporal y descargar
+        const url = window.URL.a(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `inventario_${new Date().toISOString().split('T')[0]}.pdf`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+    } catch (error) {
+        console.error("Error generando PDF:", error);
+        alert("Error al generar el PDF");
+    }
+}
