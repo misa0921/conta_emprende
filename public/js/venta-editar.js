@@ -19,7 +19,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 ===================================================== */
 async function cargarClientes() {
   try {
-    const res = await fetch(`${API}/personas/clientes`);
+    const res = await fetch(`${API}/api/personas/clientes`);
+
     const json = await res.json();
 
     const select = document.getElementById("clienteSelect");
@@ -45,7 +46,7 @@ async function cargarClientes() {
 ===================================================== */
 async function cargarProductos() {
   try {
-    const res = await fetch(`${API}/productos`);
+    const res = await fetch(`${API}/api/productos`);
     const json = await res.json();
 
     window._productos = json.data;
@@ -80,7 +81,7 @@ async function cargarProductos() {
 ===================================================== */
 async function cargarVenta() {
   try {
-    const res = await fetch(`${API}/ventas/detalle/${ventaId}`);
+    const res = await fetch(`${API}/api/ventas/detalle/${ventaId}`);
     const json = await res.json();
 
     if (!json.ok || !json.venta) {
@@ -281,7 +282,7 @@ function configurarGuardar() {
       btnGuardar.disabled = true;
       btnGuardar.innerHTML = '<span>Guardando...</span>';
 
-      const res = await fetch(`${API}/ventas/${ventaId}`, {
+      const res = await fetch(`${API}/api/ventas/${ventaId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)

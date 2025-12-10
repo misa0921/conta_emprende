@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 async function cargarVenta() {
     try {
-        const res = await fetch(`${API}/ventas/detalle/${ventaId}`);
+        const res = await fetch(`${API}/api/ventas/detalle/${ventaId}`);
         const json = await res.json();
         if (!json.ok) return alert("Error cargando venta");
 
@@ -139,7 +139,7 @@ async function cobrarVenta() {
     // ✅ Si es CAJA_CHICA, no enviamos nada de cuenta (pago directo en efectivo)
 
     try {
-        const res = await fetch(`${API}/ventas/${ventaId}/cobrar`, {
+        const res = await fetch(`${API}/api/ventas/${ventaId}/cobrar`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(body)

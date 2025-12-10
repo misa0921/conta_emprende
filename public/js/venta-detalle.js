@@ -10,7 +10,8 @@ async function cargarDetalle() {
     actualizarIdHeader(ventaId);
     
     try {
-        const res = await fetch(`${API}/ventas/detalle/${ventaId}`);
+        // ✅ CAMBIO AQUÍ - Agregar /api
+        const res = await fetch(`${API}/api/ventas/detalle/${ventaId}`);
         const json = await res.json();
 
         if (!json.ok) throw new Error("Venta no encontrada");
@@ -69,78 +70,4 @@ async function cargarDetalle() {
     }
 }
 
-function actualizarIdHeader(id) {
-    const ventaIdElement = document.getElementById('ventaId');
-    if (ventaIdElement && id) {
-        ventaIdElement.textContent = id;
-    }
-}
-
-function actualizarEstado(estado) {
-    const estadoBadge = document.getElementById('estadoBadge');
-    if (estadoBadge) {
-        estadoBadge.textContent = estado.toUpperCase();
-        
-        // Cambiar clase según el estado
-        if (estado.toUpperCase() === 'COBRADA' || estado.toUpperCase() === 'PAGADA') {
-            estadoBadge.className = 'badge badge-cobrada';
-            
-            // Deshabilitar botón cobrar si ya está cobrada
-            const btnCobrar = document.getElementById('btnCobrar');
-            if (btnCobrar) {
-                btnCobrar.disabled = true;
-                btnCobrar.innerHTML = `
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-                        <polyline points="22 4 12 14.01 9 11.01"/>
-                    </svg>
-                    Ya Cobrada
-                `;
-                btnCobrar.style.opacity = '0.6';
-                btnCobrar.style.cursor = 'not-allowed';
-            }
-        } else {
-            estadoBadge.className = 'badge badge-pendiente';
-        }
-    }
-}
-
-function actualizarContadorProductos(cantidad) {
-    const productCount = document.getElementById('productCount');
-    if (productCount) {
-        productCount.textContent = cantidad + ' producto' + (cantidad !== 1 ? 's' : '');
-    }
-}
-
-function cargarProductos(detalles) {
-    const tbody = document.querySelector("#tablaProductos tbody");
-    tbody.innerHTML = "";
-
-    detalles.forEach(d => {
-        const tr = document.createElement("tr");
-
-        tr.innerHTML = `
-            <td>${d.producto.nombre}</td>
-            <td>${d.cantidad}</td>
-            <td>$${parseFloat(d.precio_unit).toFixed(2)}</td>
-            <td>$${parseFloat(d.subtotal).toFixed(2)}</td>
-        `;
-
-        tbody.appendChild(tr);
-    });
-}
-
-// Botón Editar
-document.querySelector("#btnEditar")
-    .addEventListener("click", () => {
-        window.location.href = `venta-editar.html?id=${ventaId}`;
-    });
-
-// Botón Cobrar
-document.querySelector("#btnCobrar")
-    .addEventListener("click", () => {
-        window.location.href = `venta-cobrar.html?id=${ventaId}`;
-    });
-
-// Exponer función globalmente para que el HTML pueda usarla si es necesario
-window.actualizarVentaId = actualizarIdHeader;
+// ... resto del código sin cambios

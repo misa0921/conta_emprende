@@ -1,3 +1,6 @@
+// ✅ Declara API al inicio del archivo
+const API = "https://contaemprende-production-eb68.up.railway.app/api";
+
 const params = new URLSearchParams(window.location.search);
 const compraId = params.get("id");
 
@@ -5,7 +8,8 @@ document.addEventListener("DOMContentLoaded", cargarDetalle);
 
 async function cargarDetalle() {
     try {
-    const res = await fetch(`https://contaemprende-production-eb68.up.railway.app/api/compras/detalle/${compraId}`);
+        // ✅ Ahora usa la variable API global
+        const res = await fetch(`${API}/compras/detalle/${compraId}`);
         const json = await res.json();
 
         if (!json.ok) throw new Error("Compra no encontrada");
@@ -21,7 +25,8 @@ async function cargarDetalle() {
             <p><strong>Estado:</strong> ${c.estado}</p>
             <p><strong>Total:</strong> $${c.total}</p>
         `;
-                // ======== SECCIÓN DE TOTALES (ESTO FALTABA) ========
+        
+        // ✅ Sección de totales
         document.querySelector("#baseTotal").textContent = c.base.toFixed(2);
         document.querySelector("#ivaTotal").textContent = c.iva.toFixed(2);
         document.querySelector("#totalFinal").textContent = c.total.toFixed(2);
@@ -51,6 +56,7 @@ function cargarProductos(detalles) {
     });
 }
 
+// ✅ También corregir este botón
 document.querySelector("#btnEditar")
     .addEventListener("click", () => {
         window.location.href = `compra-editar.html?id=${compraId}`;
