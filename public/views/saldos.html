@@ -290,58 +290,6 @@
                 }
             });
         });
-
-        // Funciones para el modal (simuladas)
-        window.verMovimientos = function(cuentaId, nombreCuenta, saldo) {
-            const modal = document.getElementById('modal-movimientos');
-            const cuentaInfo = document.getElementById('modalCuentaInfo');
-            
-            // Actualizar información de la cuenta
-            cuentaInfo.querySelector('.cuenta-nombre').textContent = nombreCuenta;
-            cuentaInfo.querySelector('.cuenta-saldo').textContent = saldo;
-            
-            // Mostrar modal
-            modal.classList.add('active');
-            
-            // Aquí cargarías los movimientos desde tu backend
-            console.log('Cargando movimientos para cuenta:', cuentaId);
-        };
-
-        window.cerrarModal = function() {
-            const modal = document.getElementById('modal-movimientos');
-            modal.classList.remove('active');
-        };
-
-        window.exportarMovimientos = function() {
-            alert('Exportando movimientos a Excel...');
-            // Tu lógica de exportación aquí
-        };
-
-        window.imprimirMovimientos = function() {
-            window.print();
-        };
-
-        window.actualizarSaldos = function() {
-            const btn = document.querySelector('.btn-refresh');
-            btn.classList.add('loading');
-            
-            // Simular actualización
-            setTimeout(() => {
-                btn.classList.remove('loading');
-                alert('Saldos actualizados');
-                // Aquí llamarías a tu función de actualización real
-            }, 1000);
-        };
-
-        // Simular datos de ejemplo
-        setTimeout(() => {
-            // Ejemplo de datos
-            document.getElementById('totalSaldos').textContent = '$12,500.75';
-            document.getElementById('totalCuentas').textContent = '4';
-            document.getElementById('saldoBancario').textContent = '$10,250.50';
-            document.getElementById('saldoCaja').textContent = '$2,250.25';
-            document.getElementById('ultimoMovimiento').textContent = 'Hoy';
-        }, 1500);
     </script>
 </body>
 </html>
